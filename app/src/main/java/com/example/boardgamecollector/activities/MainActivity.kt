@@ -2,7 +2,9 @@ package com.example.boardgamecollector.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.boardgamecollector.database.Game
 import com.example.boardgamecollector.R
 import com.example.boardgamecollector.adapters.GameAdapter
@@ -17,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var createListJob : Job? = null
-    private var i : Int = 10
     var gameList: ArrayList<gameHeader> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,52 +26,42 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        createListJob = loadData()
+        println("diemas")
+        loadData()
         binding.addGame.setOnClickListener{ addGame() }
-    }
-
-    fun popData() = CoroutineScope(Dispatchers.Main).launch {
-
-        val gameLists: ArrayList<Game> = ArrayList()
-        val task = async(Dispatchers.IO){
-            val db = AppDatabase.getInstance(applicationContext)
-            for (game in gameLists)
-                db.userDao().insertAll(game)
-        }
-       task.await()
-
     }
 
     override fun onResume() {
         super.onResume()
-        createListJob = loadData()
+        createListJob ?: run {
+            loadData()
+        }
     }
 
     override fun onStop() {
         super.onStop()
-
-        createListJob?.cancel()
+        //createListJob?.cancel()
+        createListJob = null
     }
 
-    private fun loadData(): Job {
+    private fun loadData() {
+        createListJob = lifecycleScope.launch {
+            println("xd1")
+            withContext(Dispatchers.IO) {
+                delay(10000)
+                println("xd3")
+                val db = AppDatabase.getInstance(applicationContext)
+                println("xd4")
+                gameList = db.userDao().getAllHeaders() as ArrayList<gameHeader>
+                println("xd5")
 
-     return CoroutineScope(Dispatchers.Main).launch {
-        delay(10000)
-        val db = AppDatabase.getInstance(applicationContext)
-        //gameList = db.userDao().getAllHeaders() as ArrayList<gameHeader>
-
-        val task = async(Dispatchers.IO){
-            db.userDao().getAllHeaders()
+            }
+            println("xd2")
+            createGameListAdapter()
         }
-
-        gameList = task.await() as ArrayList<gameHeader>
-        createGameList()
-    }
     }
 
-    private fun createGameList(){
-
+    private fun createGameListAdapter(){
         val mAdapter = GameAdapter(this, R.layout.list_game, gameList)
         binding.gameList.adapter = mAdapter
     }
