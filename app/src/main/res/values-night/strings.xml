@@ -1,8 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BoardGameCollector</string>
-    <string name="addGameAlertTitle">Game Title</string>
-    <string name="addGameAlertEnter">Enter Title</string>
-    <string name="Locations">Locations</string>
+    <string name="Locations">Item</string>
     <string name="addlocation">Add Location</string>
     <string name="title">Title</string>
     <string name="original_title">Original Title</string>

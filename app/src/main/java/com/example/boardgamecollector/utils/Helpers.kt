@@ -18,19 +18,24 @@ class Helpers :ViewModel(){
 
 
     companion object {
-        fun getImage(link: String): Bitmap? {
+
+        val GAME_TYPE = arrayListOf("boardgame","boardgameexpansion","mixed")
+
+        suspend fun getImage(link: String): Bitmap? {
 
             var image: Bitmap? = null
+            var newLink = link
 
-            var job = CoroutineScope(Main).async {
-                try {
-
-                    withContext(Dispatchers.IO) {
-                        val url = URL(link)
-                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            withContext(Dispatchers.IO) {
+                try{
+                    if (!link.startsWith("http://") && !link.startsWith("https://"))
+                    {
+                        newLink =  "http://" + link;
                     }
-
-                } catch (e: Exception) {
+                    val url = URL(newLink)
+                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                }
+                catch (e: Exception) {
                     Log.e("Error Message", e.message.toString())
                     e.printStackTrace()
                 }

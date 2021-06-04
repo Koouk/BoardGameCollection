@@ -3,10 +3,11 @@ package com.example.boardgamecollector.database
 import android.content.Context
 import androidx.room.*
 
-@Database(entities = arrayOf(Game::class), version = 1)
+@Database(entities = [Game::class, Location::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): GameDAO
+    abstract fun LocDAO(): LocDAO
     companion object {
 
         @Volatile

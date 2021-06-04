@@ -14,6 +14,10 @@ interface GameDAO {
     @Delete
     suspend fun delete(user: Game)
 
-    @Query("SELECT id,title as title, Description as description,Ranking as ranking,Release_year as  year, Image_link as URL FROM Games")
-    suspend fun getAllHeaders(): List<gameHeader>
+    @Query("SELECT id,title as title, Description as description,Ranking as ranking,Release_year as  year, Thumb_Image_link as URL FROM Games" +
+            " WHERE Game_type LIKE :game")
+    suspend fun getAllHeaders(game : String = "boardgame"): List<gameHeader>
+
+    @Query("DELETE  FROM games")
+    suspend fun nukeOption()
 }

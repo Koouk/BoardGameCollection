@@ -1,50 +1,58 @@
 package com.example.boardgamecollector.database
 
 import android.graphics.Bitmap
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.time.LocalDate
 
-@Entity (tableName = "games")
-data class Game(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    @ColumnInfo(name = "Title")
-    val title : String?,
-    @ColumnInfo(name = "Original_title")
-    val originalTitle : String?,
-    @ColumnInfo(name = "Release_year")
-    val releaseYear : String?,
-    @ColumnInfo(name = "Description")
-    val description : String?,
-    @ColumnInfo(name = "Order_date")
-    val orderDate : LocalDate?,
-    @ColumnInfo(name = "Add_date")
-    val addDate : LocalDate?,
-    @ColumnInfo(name = "Cost")
-    val cost : String?,
-    @ColumnInfo(name = "SCD")
-    val scd : String?,
-    @ColumnInfo(name = "EAN")
-    val ean : String?,
-    @ColumnInfo(name = "BGG_id")
-    val bggId : Long?,
-    @ColumnInfo(name = "Production_code")
-    val productionCode : String?,
-    @ColumnInfo(name = "Ranking")
-    val ranking : Int?,
-    @ColumnInfo(name = "Game_type")
-    val gameType : String?,
-    @ColumnInfo(name = "Comment")
-    val comment : String?,
-    @ColumnInfo(name = "Image_link")
-    val url : String?,
-
+@Entity (tableName = "games",foreignKeys = arrayOf(
+    ForeignKey(entity = Location::class,
+        parentColumns = arrayOf("id"),childColumns = arrayOf("localizationID"),onDelete = ForeignKey.RESTRICT )
 )
+)
+data class Game constructor(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
+    @ColumnInfo(name = "Title")
+    var title : String? = null,
+    @ColumnInfo(name = "Original_title")
+    var originalTitle : String? = null,
+    @ColumnInfo(name = "Release_year")
+    var releaseYear : String? = null,
+    @ColumnInfo(name = "Description")
+    var description : String? = null,
+    @ColumnInfo(name = "Order_date")
+    var orderDate : LocalDate? = null,
+    @ColumnInfo(name = "Add_date")
+    var addDate : LocalDate? = null,
+    @ColumnInfo(name = "Cost")
+    var cost : String? = null,
+    @ColumnInfo(name = "SCD")
+    var scd : String? = null,
+    @ColumnInfo(name = "EAN")
+    var ean : String? = null,
+    @ColumnInfo(name = "BGG_id")
+    var bggId : Long = 0,
+    @ColumnInfo(name = "Production_code")
+    var productionCode : String? = null,
+    @ColumnInfo(name = "Ranking")
+    var ranking : Int = 0,
+    @ColumnInfo(name = "Game_type")
+    var gameType : String? = null,
+    @ColumnInfo(name = "Parent_bgg")
+    var parentBGG : Long? = null,
+    @ColumnInfo(name = "Comment")
+    var comment : String? = null,
+    @ColumnInfo(name = "Thumb_Image_link")
+    var ThumbURL : String? = null,
+    @ColumnInfo(name = "Big_Image_link")
+    var ImgURL : String? = null,
+    @ColumnInfo(name = "localizationID", index = true)
+    var localizationID: Int? = null
+
+    )
 {
-    @Ignore val bitmap : Bitmap? = null
+    @Ignore var bitmap : Bitmap? = null
+
 }
 
 

@@ -1,18 +1,18 @@
 package com.example.boardgamecollector.adapters
 
 import android.content.Context;
+import android.location.Location
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.boardgamecollector.database.Game
 import com.example.boardgamecollector.R
 import com.example.boardgamecollector.dataModels.gameHeader
 
 
-open class GameAdapter(context: Context,resource : Int , list: ArrayList<gameHeader>) :
+open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHeader>) :
     ArrayAdapter<gameHeader>(context, resource, list) {
 
     private val mContext: Context
@@ -50,6 +50,8 @@ open class GameAdapter(context: Context,resource : Int , list: ArrayList<gameHea
 
         return listItem
     }
+
+
 
     init {
         mContext = context

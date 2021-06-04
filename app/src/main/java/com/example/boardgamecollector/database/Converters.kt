@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 
 class Converters {
 
-    val formatter = DateTimeFormatter.ofPattern("dd MMMM YYYY")
+    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
 
     @TypeConverter
     fun fromDateToString(value : LocalDate?) : String?{
