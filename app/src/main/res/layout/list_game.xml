@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gridLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
@@ -24,45 +32,42 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:paddingVertical="10dp"
+                android:paddingVertical="10dp" />
 
-                 />
-            <ScrollView
-                android:nestedScrollingEnabled="true"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
 
-                android:orientation="vertical">
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                     />
-                <TextView
-                    android:id="@+id/gameTitleYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                     />
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    />
+                <LinearLayout
 
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <TextView
+                        android:id="@+id/gameTitleYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
 
                     <TextView
                         android:id="@+id/gameDescription"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                         />
+                        android:layout_height="match_parent"
+                        android:scrollbars = "vertical"
+                        android:nestedScrollingEnabled="true"
+                        android:text="TextView" />
+                </LinearLayout>
 
 
-
-            </LinearLayout>
-            </ScrollView>
         </LinearLayout>
+    </LinearLayout>
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
