@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGameCollector">
-        <activity android:name=".activities.GameDetailsActivity"></activity>
+        <activity android:name=".activities.RankingHistoryActivity"></activity>
+        <activity android:name=".activities.GameDetailsActivity" />
         <activity android:name=".activities.LocationsActivity" />
         <activity android:name=".activities.AddGameActivity" />
         <activity android:name=".activities.MainActivity">

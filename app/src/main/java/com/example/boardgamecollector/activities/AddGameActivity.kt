@@ -7,13 +7,14 @@ import android.os.Bundle
 import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.R
 import com.example.boardgamecollector.dataModels.BGGHeader
-import com.example.boardgamecollector.database.AppDatabase
-import com.example.boardgamecollector.database.Game
+import com.example.boardgamecollector.database.*
 import com.example.boardgamecollector.databinding.ActivityAddGameBinding
 import com.example.boardgamecollector.utils.BGGapi
 import com.example.boardgamecollector.utils.Helpers
@@ -30,6 +31,7 @@ class AddGameActivity : AppCompatActivity() {
     private var jobForm : Job? = null
     private var jobSpinner: Job? = null
     private var game : Game? = null
+    private var locs: ArrayList<Location>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +57,41 @@ class AddGameActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Helpers.GAME_TYPE)
         binding.typeEnter.adapter = adapter
         binding.typeEnter.setSelection(-1)
+        binding.typeEnter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position == 1)
+                    binding.bggParent.visibility = View.VISIBLE
+                else
+                    binding.bggParent.visibility = View.INVISIBLE
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+            
         jobSpinner?.cancel()
         jobSpinner = CoroutineScope(Dispatchers.Main).launch {
 
+            binding.locationsEnter.setSelection(-1)
             withContext(Dispatchers.IO) {
-                // TODO locations spinner
+                val db = AppDatabase.getInstance(applicationContext)
+                locs = db.LocDAO().getAllLocalization() as ArrayList<Location>?
             }
+            val list = arrayListOf<String>()
+            locs?.forEach {
+                list.add("${it.name} (${it.description})")
+            }
+            val adapter = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, list)
+            binding.locationsEnter.adapter = adapter
+
         }
     }
 
@@ -143,6 +173,9 @@ class AddGameActivity : AppCompatActivity() {
 
             withContext(Dispatchers.IO) {
                 BGGapi.searchGameById(g.bggID, game!!)
+                // dodawanie artystow i proj jesli ich nie ma jeszcze
+
+                fillArtistDesigners()
                 //TODO SPINNER
             }
             if (game!!.title != null)
@@ -165,7 +198,38 @@ class AddGameActivity : AppCompatActivity() {
 
             binding.typeEnter.setSelection(index)
 
+            if(game!!.parentBGG != null)
+                binding.bggParentEnter.text = SpannableStringBuilder(game!!.parentBGG.toString())
+
+            artistDesignersFill()
         }
+    }
+
+    suspend fun fillArtistDesigners() {
+        val db = AppDatabase.getInstance(applicationContext)
+        if(game?.artists != null )
+            for (i in game?.artists!!)
+            {
+                var count = 0
+                withContext(Dispatchers.IO) {
+
+                    count = db.ArtistsDAO().checkIfExists(i.bggID)
+                    if (count <= 0 ) {
+                        i.id = db.ArtistsDAO().insert(i)
+                    }
+                }
+            }
+        if(game?.designers != null )
+            for (i in game?.designers!!)
+            {
+                var count = 0
+                withContext(Dispatchers.IO) {
+                    count = db.DesignersDAO().checkIfExists(i.bggID)
+                    if (count <= 0 ) {
+                        i.id = db.DesignersDAO().insert(i)
+                    }
+                }
+            }
     }
 
     private fun saveGame() {
@@ -198,20 +262,50 @@ class AddGameActivity : AppCompatActivity() {
             game?.productionCode = binding.productionCodeEnter.text.toString()
 
             if (binding.typeEnter.selectedItemPosition != -1)
-                game?.gameType = Helpers.GAME_TYPE[binding.typeEnter.selectedItemPosition]//TODO tylko konkretne typu
+                game?.gameType = Helpers.GAME_TYPE[binding.typeEnter.selectedItemPosition]
 
 
             game?.comment = binding.commentEnter.text.toString()
             game?.ThumbURL = binding.thumbnailEnter.text.toString()
             game?.ImgURL = binding.imgEnter.text.toString()
-            //TODO lokalizacje
+            val pGG = binding.bggParentEnter.text.toString()
+            if (pGG.isNullOrEmpty())
+                game?.parentBGG = 0
+            else
+                game?.parentBGG = pGG.toLong()
+
+            if (locs != null && binding.locationsEnter.selectedItemPosition > -1)
+            {
+                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id
+            }
+
+            saveArtistDesigners()
 
             withContext(Dispatchers.IO) {
 
                 val db = AppDatabase.getInstance(applicationContext)
-                game?.let { db.userDao().insertAll(it) }
+                val ids = game?.let { db.userDao().insertAll(it) }
+                for (i in ids)
+                {
+
+                }
+                saveArtistDesigners()
             }
         }
+    }
+
+    suspend fun saveArtistDesigners() {
+        val db = AppDatabase.getInstance(applicationContext)
+        if(game?.artists != null)
+            for (i in game?.artists!!){
+                val temp = ArtistsGamesRef(game!!.id,i.id)
+                db.ArtistsGameDAO().insert(temp)
+            }
+        if(game?.designers != null)
+            for (i in game?.designers!!){
+                val temp = DesignersGamesRef(game!!.id,i.id)
+                db.DesignersGameDAO().insert(temp)
+            }
     }
 
     private fun getGamesByName(){
@@ -224,5 +318,32 @@ class AddGameActivity : AppCompatActivity() {
             }
             makeChoiceDialog(games)
         }
+    }
+
+    private fun artistDesignersFill() {
+        val des = ArrayList<String>()
+        if (game!!.designers != null) {
+            for (i in game!!.designers!!) {
+                des.add("${i.name} ${i.surname}")
+            }
+
+            val adapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, des)
+            binding.designersEnter.adapter  = adapter
+
+        }
+
+        val art = ArrayList<String>()
+        if (game!!.artists != null) {
+            for (i in game!!.artists!!) {
+                art.add("${i.name} ${i.surname}")
+            }
+
+            val adapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, art)
+            binding.artistsEnter.adapter  = adapter
+
+        }
+
+        Helpers.strechList( binding.designersEnter)
+        Helpers.strechList( binding.artistsEnter)
     }
 }

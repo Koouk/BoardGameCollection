@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +24,7 @@
                 android:id="@+id/textRanking"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6"
+                android:layout_weight="0.8"
                 android:gravity="center" />
 
             <ImageView
@@ -32,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:paddingVertical="10dp" />
+                android:paddingVertical="100dp" />
 
 
 
@@ -60,9 +60,8 @@
                         android:id="@+id/gameDescription"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scrollbars = "vertical"
-                        android:nestedScrollingEnabled="true"
-                        android:text="TextView" />
+
+                        />
                 </LinearLayout>
 
 

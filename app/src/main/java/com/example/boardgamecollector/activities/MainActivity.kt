@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         binding.gameList.onItemClickListener = OnItemClickListener { parent, view, position, id ->
             val intent = Intent(this, GameDetailsActivity::class.java)
             val idT = gameList[position].id
-            intent.putExtra("id", idT)
+            intent.putExtra("id", idT.toString())
             startActivity(intent)
         }
         }

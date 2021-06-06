@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">BoardGameCollector</string>
+    <string name="position">Position: </string>
+    <string name="nohist">There is no rank history to show </string>
+    <string name="rank">Rank: </string>
+    <string name="Until">Until: </string>
     <string name="addGameAlertTitle">Game Title</string>
     <string name="addGameAlertEnter">Enter Title</string>
     <string name="Locations">Locations</string>
@@ -23,4 +27,11 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="image_link">Image Link</string>
+    <string name="back">Back</string>
+    <string name="expansions">Expansions</string>
+    <string name="bgg_fetch">BGG fetch</string>
+    <string name="main_game_bgg_id">Main game BGG ID</string>
+    <string name="owned_expansion">Owned expansion</string>
+    <string name="artists">Artists</string>
+    <string name="designers">Designers</string>
 </resources>

@@ -52,7 +52,8 @@ data class Game constructor(
     )
 {
     @Ignore var bitmap : Bitmap? = null
-
+    @Ignore var artists : ArrayList<Artists>? = null
+    @Ignore var designers : ArrayList<Designers>? = null
 }
 
 

@@ -21,4 +21,11 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="image_link">Image Link</string>
+    <string name="back">Back</string>
+    <string name="expansions">Expansions</string>
+    <string name="bgg_fetch">BGG fetch</string>
+    <string name="main_game_bgg_id">Main game BGG ID</string>
+    <string name="owned_expansion">Owned expansion</string>
+    <string name="artists">Artists</string>
+    <string name="designers">Designers</string>
 </resources>
