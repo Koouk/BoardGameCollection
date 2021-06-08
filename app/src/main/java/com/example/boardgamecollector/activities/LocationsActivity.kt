@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.R
 import com.example.boardgamecollector.adapters.LocAdapter

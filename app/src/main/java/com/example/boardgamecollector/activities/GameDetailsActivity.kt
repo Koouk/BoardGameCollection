@@ -3,23 +3,19 @@ package com.example.boardgamecollector.activities
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.R
-
 import com.example.boardgamecollector.dataModels.BGGHeader
 import com.example.boardgamecollector.dataModels.gameHeader
 import com.example.boardgamecollector.database.*
 import com.example.boardgamecollector.databinding.ActivityGameDetailsBinding
 import com.example.boardgamecollector.utils.BGGapi
 import com.example.boardgamecollector.utils.Helpers
-import com.google.android.material.internal.ContextUtils.getActivity
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -292,7 +288,7 @@ class GameDetailsActivity : AppCompatActivity() {
                }
                 else if (!game!!.title.isNullOrBlank())
                {
-                   var gamesH = ArrayList<BGGHeader>()
+                   val gamesH = ArrayList<BGGHeader>()
                    binding.progressBarDetaila.visibility = View.VISIBLE
                    withContext(Dispatchers.IO) {
 
@@ -309,7 +305,7 @@ class GameDetailsActivity : AppCompatActivity() {
 
     private fun makeChoiceDialog(games : ArrayList<BGGHeader>) {
         val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setIcon(com.example.boardgamecollector.R.drawable.ic_launcher_foreground)
+        alertDialog.setIcon(R.drawable.ic_launcher_foreground)
         alertDialog.setTitle("Choose an Item")
 
         val listItems : List <String> = games.map { i ->
@@ -379,7 +375,7 @@ class GameDetailsActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun createLocAndTypeList() {
+    private fun createLocAndTypeList() {
 
         val list = arrayListOf<String>()
         locs?.forEach {
@@ -390,13 +386,13 @@ class GameDetailsActivity : AppCompatActivity() {
 
     }
 
-    suspend private fun fillForm() {
+    private suspend fun fillForm() {
 
         if (game != null)
         {
             binding.progressBarDetaila.visibility = View.VISIBLE
             //TODO STRING RES
-            binding.rankEnter.text = SpannableStringBuilder( "${getString(R.string.rank)} ${game!!.ranking.toString()}")
+            binding.rankEnter.text = SpannableStringBuilder( "${getString(R.string.rank)} ${game!!.ranking}")
 
             if (game!!.title != null)
                 binding.titleEnter.text = SpannableStringBuilder(game!!.title)
@@ -428,7 +424,7 @@ class GameDetailsActivity : AppCompatActivity() {
             if (game!!.ImgURL != null)
                 binding.imgEnter.text = SpannableStringBuilder(game!!.ImgURL)
 
-            var ext = ArrayList<String>()
+            val ext = ArrayList<String>()
             if (extensions != null) {
                 for (i in extensions!!) {
                     ext.add("${i.title} (${i.year})")
@@ -454,7 +450,7 @@ class GameDetailsActivity : AppCompatActivity() {
 
             var index = -1
             locs?.forEach{
-                if(it.id.toLong() == game!!.localizationID){
+                if(it.id == game!!.localizationID){
                     index = locs!!.indexOf(it)
                     }
             }
@@ -477,26 +473,20 @@ class GameDetailsActivity : AppCompatActivity() {
 
     private fun artistDesignersFill() {
         val des = ArrayList<String>()
-        if (game!!.designers != null) {
-            for (i in game!!.designers!!) {
-                des.add("${i.name} ${i.surname}")
-            }
-
-            val adapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, des)
-            binding.designersEnter.adapter  = adapter
-
+        for (i in game!!.designers) {
+            des.add("${i.name} ${i.surname}")
         }
+
+        val adapterD = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, des)
+        binding.designersEnter.adapter  = adapterD
 
         val art = ArrayList<String>()
-        if (game!!.artists != null) {
-            for (i in game!!.artists!!) {
-                art.add("${i.name} ${i.surname}")
-            }
-
-            val adapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, art)
-            binding.artistsEnter.adapter  = adapter
-
+        for (i in game!!.artists) {
+            art.add("${i.name} ${i.surname}")
         }
+
+        val adapterA= ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, art)
+        binding.artistsEnter.adapter  = adapterA
 
         Helpers.strechList( binding.designersEnter)
         Helpers.strechList( binding.artistsEnter)
@@ -533,7 +523,7 @@ class GameDetailsActivity : AppCompatActivity() {
 
             if (locs != null && binding.locationsEnter.selectedItemPosition > -1)
             {
-                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id.toLong()
+                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id
             }
 
 
@@ -550,7 +540,7 @@ class GameDetailsActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun saveArtistDesigners() {
+    private suspend fun saveArtistDesigners() {
         val db = AppDatabase.getInstance(applicationContext)
         if(game?.artists != null)
             game?.id?.let { db.ArtistsGameDAO().nukeOptionID(it) }
@@ -566,7 +556,7 @@ class GameDetailsActivity : AppCompatActivity() {
             }
     }
 
-    suspend fun addArtistDesignersIfNotExists() {
+    private suspend fun addArtistDesignersIfNotExists() {
         val db = AppDatabase.getInstance(applicationContext)
         if(game?.artists != null )
             for (i in game?.artists!!)

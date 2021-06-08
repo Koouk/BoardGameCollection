@@ -47,4 +47,5 @@
     <string name="Error">Cannot delete not-empty location</string>
     <string name="persons">"Choose person: "</string>
     <string name="edit2">Edit</string>
+    <string name="game_list">Game list:</string>
 </resources>

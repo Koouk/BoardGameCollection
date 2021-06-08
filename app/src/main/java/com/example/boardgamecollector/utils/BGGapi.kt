@@ -4,7 +4,6 @@ import android.text.Html
 import android.util.Log
 import com.example.boardgamecollector.dataModels.BGGHeader
 import com.example.boardgamecollector.dataModels.RanksHeader
-import com.example.boardgamecollector.dataModels.gameHeader
 import com.example.boardgamecollector.database.Artists
 import com.example.boardgamecollector.database.Designers
 import com.example.boardgamecollector.database.Game
@@ -70,15 +69,15 @@ class BGGapi {
                 return
             }
 
-            var orgName :String = ""
+            var orgName = ""
             var thumb :String? = null
             var img: String? = null
-            var desc :String = ""
-            var rank :Int = 0
-            var type :String = ""
+            var desc = ""
+            var rank = 0
+            var type = ""
             var baseGameId : Long? = null
-            var art : ArrayList<Artists> = ArrayList<Artists>()
-            var des : ArrayList<Designers> = ArrayList<Designers>()
+            val art : ArrayList<Artists> = ArrayList<Artists>()
+            val des : ArrayList<Designers> = ArrayList<Designers>()
             try {
                 orgName = document.getElementsByTagName("name").item(0).attributes.getNamedItem("value").nodeValue
                 thumb = document.getElementsByTagName("thumbnail")?.item(0)?.textContent
@@ -195,8 +194,8 @@ class BGGapi {
             val doc = docBuilderFact.newDocumentBuilder()
             var document : Document
             var success = false
-            var attempts : Int = 3
-            var curr : Int = 0
+            val attempts = 3
+            var curr = 0
             while(true) {
                 curr += 1
                 try {
@@ -228,8 +227,8 @@ class BGGapi {
             val games = document.getElementsByTagName("item")
             for (i in 0 until games.length) {
                 var id : Long = 0
-                var title : String = ""
-                var year : String = ""
+                var title = ""
+                var year = ""
 
                 try{
 

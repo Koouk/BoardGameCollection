@@ -1,16 +1,13 @@
 package com.example.boardgamecollector.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.R
-import com.example.boardgamecollector.dataModels.gameHeader
 import com.example.boardgamecollector.database.AppDatabase
 import com.example.boardgamecollector.database.RankHistory
-import com.example.boardgamecollector.databinding.ActivityGameDetailsBinding
 import com.example.boardgamecollector.databinding.ActivityRankingHistoryBinding
 import kotlinx.coroutines.*
-import java.security.AccessController.getContext
 
 class RankingHistoryActivity : AppCompatActivity() {
 
@@ -25,7 +22,7 @@ class RankingHistoryActivity : AppCompatActivity() {
 
         val extras = intent.extras
         if(extras != null) {
-            val id = extras.getInt("id");
+            val id = extras.getInt("id")
             createRankHistory(id)
         } else {
             this.finish()

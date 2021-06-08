@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -66,8 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val id = item.itemId
-        when(id){
+        when(item.itemId){
             R.id.Location -> locationsActivity()
             R.id.BGG -> bggActivity()
             R.id.Name -> sortByName()
@@ -117,28 +115,23 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-    private fun click(position: Int, convertView: View?, parent: ViewGroup)
-    {
-
-        Toast.makeText(this, "Selected : $position",  Toast.LENGTH_SHORT).show()
-    }
 
     private fun addGame(){
         val i = Intent(this, AddGameActivity::class.java)
         startActivity(i)
     }
 
-    fun sortByYear() {
+    private fun sortByYear() {
         gameList.sortByDescending { it.year }
         createGameListAdapter()
     }
 
-    fun sortByRank() {
+    private fun sortByRank() {
         gameList.sortBy { if (it.ranking!! > 0) it.ranking else Int.MAX_VALUE }
         createGameListAdapter()
     }
 
-    fun sortByName() {
+    private fun sortByName() {
         gameList.sortBy { if( it.title.isNullOrBlank()) "ZZZ" else it.title }
         createGameListAdapter()
     }

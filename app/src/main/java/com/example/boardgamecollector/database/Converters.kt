@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 
 class Converters {
 
-    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
 
     val formatter2 = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
 

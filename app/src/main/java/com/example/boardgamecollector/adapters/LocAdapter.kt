@@ -1,7 +1,7 @@
 package com.example.boardgamecollector.adapters
 
 
-import android.content.Context;
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +14,8 @@ import com.example.boardgamecollector.database.Location
 open class LocAdapter(context: Context, resource: Int, list: ArrayList<Location>) :
     ArrayAdapter<Location>(context, resource, list) {
 
-    private val mContext: Context
-    private var locList: ArrayList<Location>
+    private val mContext: Context = context
+    private var locList: ArrayList<Location> = list
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -40,8 +40,4 @@ open class LocAdapter(context: Context, resource: Int, list: ArrayList<Location>
         return listItem as View
     }
 
-    init {
-        mContext = context
-        locList = list
-    }
 }

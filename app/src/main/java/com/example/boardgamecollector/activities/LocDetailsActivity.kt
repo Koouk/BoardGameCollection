@@ -1,19 +1,15 @@
 package com.example.boardgamecollector.activities
 
-import android.R
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.dataModels.LocHeader
-import com.example.boardgamecollector.dataModels.gameHeader
 import com.example.boardgamecollector.database.AppDatabase
-import com.example.boardgamecollector.database.LocDAO
 import com.example.boardgamecollector.database.Location
 import com.example.boardgamecollector.databinding.ActivityLocDetailsBinding
-import com.example.boardgamecollector.databinding.ActivityLocationsBinding
-import com.example.boardgamecollector.utils.Helpers
 import kotlinx.coroutines.*
 
 class LocDetailsActivity : AppCompatActivity() {
@@ -52,8 +48,8 @@ class LocDetailsActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main){
                 Toast.makeText(
                     applicationContext, com.example.boardgamecollector.R.string.ToastSave,
-                    Toast.LENGTH_LONG).show();
-            }}
+                    Toast.LENGTH_LONG).show()
+                }}
         finish()
         }
     }
@@ -65,7 +61,7 @@ class LocDetailsActivity : AppCompatActivity() {
                 val db = AppDatabase.getInstance(applicationContext)
                 val count = location?.let { db.userDao().getGamesByLocation(it.id) }
                 if (count != null) {
-                    if (count.size > 0) {
+                    if (count.isNotEmpty()) {
                         withContext(Dispatchers.Main) {
                         Toast.makeText(
                             applicationContext, com.example.boardgamecollector.R.string.Error,
@@ -99,10 +95,10 @@ class LocDetailsActivity : AppCompatActivity() {
             binding.Comment.text = SpannableStringBuilder(location?.description)
 
             val list = arrayListOf<String>()
-            gameList?.forEach {
+            gameList.forEach {
                 list.add("${it.title} (${it.year})")
             }
-            val adapter = ArrayAdapter(applicationContext, R.layout.simple_spinner_dropdown_item, list)
+            val adapter = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, list)
             binding.List.adapter = adapter
 
         }

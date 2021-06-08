@@ -1,7 +1,6 @@
 package com.example.boardgamecollector.adapters
 
-import android.content.Context;
-import android.location.Location
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,9 @@ import com.example.boardgamecollector.dataModels.gameHeader
 open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHeader>) :
     ArrayAdapter<gameHeader>(context, resource, list) {
 
-    private val mContext: Context
-    private var moviesList: ArrayList<gameHeader>
-
+    private val mContext: Context = context
+    private var moviesList: ArrayList<gameHeader> = list
+    private var gamesListFilter : ArrayList<gameHeader> = list
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -52,9 +51,4 @@ open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHead
     }
 
 
-
-    init {
-        mContext = context
-        moviesList = list
-    }
 }

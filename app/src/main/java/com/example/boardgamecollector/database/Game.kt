@@ -4,10 +4,8 @@ import android.graphics.Bitmap
 import androidx.room.*
 import java.time.LocalDate
 
-@Entity (tableName = "games",foreignKeys = arrayOf(
-    ForeignKey(entity = Location::class,
-        parentColumns = arrayOf("id"),childColumns = arrayOf("localizationID"),onDelete = ForeignKey.RESTRICT )
-)
+@Entity (tableName = "games",foreignKeys = [ForeignKey(entity = Location::class,
+    parentColumns = arrayOf("id"),childColumns = arrayOf("localizationID"),onDelete = ForeignKey.RESTRICT )]
 )
 data class Game constructor(
     @PrimaryKey(autoGenerate = true)

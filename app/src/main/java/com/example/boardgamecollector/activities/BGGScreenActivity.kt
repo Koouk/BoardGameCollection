@@ -65,7 +65,7 @@ class BGGScreenActivity : AppCompatActivity() {
 
     private fun fetchCollection() {
         val user = binding.InputUsername.text.toString()
-        var games = ArrayList<BGGHeader>()
+        val games = ArrayList<BGGHeader>()
         fetchJob?.cancel()
         fetchJob = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBarBGG.visibility = View.VISIBLE
@@ -163,48 +163,44 @@ class BGGScreenActivity : AppCompatActivity() {
 
     }
 
-    suspend fun addArtistDesignersIfNotExists(game : Game) {
+    private suspend fun addArtistDesignersIfNotExists(game : Game) {
         val db = AppDatabase.getInstance(applicationContext)
-        if(game?.artists != null )
-            for (i in game?.artists!!)
-            {
-                var count = 0
-                withContext(Dispatchers.IO) {
+        for (i in game.artists)
+        {
+            var count = 0
+            withContext(Dispatchers.IO) {
 
-                    count = db.ArtistsDAO().checkIfExists(i.bggID)
-                    if (count <= 0 || i.bggID < 1) {
-                        i.id = db.ArtistsDAO().insert(i)
-                    }else{
-                        i.id = db.ArtistsDAO().getID(i.bggID)
-                    }
+                count = db.ArtistsDAO().checkIfExists(i.bggID)
+                if (count <= 0 || i.bggID < 1) {
+                    i.id = db.ArtistsDAO().insert(i)
+                }else{
+                    i.id = db.ArtistsDAO().getID(i.bggID)
                 }
             }
-        if(game?.designers != null )
-            for (i in game?.designers!!)
-            {
-                var count = 0
-                withContext(Dispatchers.IO) {
-                    count = db.DesignersDAO().checkIfExists(i.bggID)
-                    if (count <= 0 || i.bggID < 1) {
-                        i.id = db.DesignersDAO().insert(i)
-                    }else{
-                        i.id = db.DesignersDAO().getID(i.bggID)
-                    }
+        }
+        for (i in game.designers)
+        {
+            var count = 0
+            withContext(Dispatchers.IO) {
+                count = db.DesignersDAO().checkIfExists(i.bggID)
+                if (count <= 0 || i.bggID < 1) {
+                    i.id = db.DesignersDAO().insert(i)
+                }else{
+                    i.id = db.DesignersDAO().getID(i.bggID)
                 }
             }
+        }
     }
 
-    suspend fun saveArtistDesigners(game : Game) {
+    private suspend fun saveArtistDesigners(game : Game) {
         val db = AppDatabase.getInstance(applicationContext)
-        if(game?.artists != null)
-            for (i in game?.artists!!){
-                val temp = ArtistsGamesRef(game!!.id,i.id)
-                db.ArtistsGameDAO().insert(temp)
-            }
-        if(game?.designers != null)
-            for (i in game?.designers!!){
-                val temp = DesignersGamesRef(game!!.id,i.id)
-                db.DesignersGameDAO().insert(temp)
-            }
+        for (i in game.artists){
+            val temp = ArtistsGamesRef(game.id,i.id)
+            db.ArtistsGameDAO().insert(temp)
+        }
+        for (i in game.designers){
+            val temp = DesignersGamesRef(game.id,i.id)
+            db.DesignersGameDAO().insert(temp)
+        }
     }
 }

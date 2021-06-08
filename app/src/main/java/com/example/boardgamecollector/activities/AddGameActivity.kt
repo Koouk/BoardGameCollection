@@ -8,7 +8,10 @@ import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.R
 import com.example.boardgamecollector.dataModels.BGGHeader
@@ -18,7 +21,6 @@ import com.example.boardgamecollector.utils.BGGapi
 import com.example.boardgamecollector.utils.Helpers
 import kotlinx.coroutines.*
 import java.time.LocalDate
-
 
 
 class AddGameActivity : AppCompatActivity() {
@@ -115,7 +117,7 @@ class AddGameActivity : AppCompatActivity() {
         }
 
 // add OK and Cancel buttons
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+        builder.setPositiveButton("OK", { dialog, _ ->
             val selected = ArrayList<Artists>()
             for (i in checkedItems.indices)
             {
@@ -180,7 +182,7 @@ class AddGameActivity : AppCompatActivity() {
             currentDesigners!!.add(it)
         }
         allDesigners?.forEach{
-            if (game.designers.contains(it) == false){
+            if (!game.designers.contains(it)){
                 gameString.add("${it.name} ${it.surname}")
                 currentDesigners!!.add(it)
             }
@@ -196,7 +198,7 @@ class AddGameActivity : AppCompatActivity() {
         }
 
 // add OK and Cancel buttons
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+        builder.setPositiveButton("OK", { dialog, _ ->
             val selected = ArrayList<Designers>()
             for (i in checkedItems.indices)
             {
@@ -286,12 +288,12 @@ class AddGameActivity : AppCompatActivity() {
         input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
-        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+        builder.setPositiveButton("OK", { dialog, _ ->
             title = input.text.toString()
             dialog.cancel()
             getGamesByName()
         })
-        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ -> dialog.cancel() })
+        builder.setNegativeButton("Cancel", { dialog, _ -> dialog.cancel() })
 
         builder.show()
     }
@@ -315,7 +317,7 @@ class AddGameActivity : AppCompatActivity() {
             checkedItem = which
         }
 
-        alertDialog.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+        alertDialog.setPositiveButton("OK", { dialog, _ ->
             fillForm(games[checkedItem])
             dialog.dismiss()
 
@@ -375,7 +377,7 @@ class AddGameActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun addArtistDesignersIfNotExists() {
+    private suspend fun addArtistDesignersIfNotExists() {
         val db = AppDatabase.getInstance(applicationContext)
         for (i in game.artists)
         {
@@ -463,7 +465,7 @@ class AddGameActivity : AppCompatActivity() {
         }
     }
 
-    suspend fun saveArtistDesigners() {
+    private suspend fun saveArtistDesigners() {
         val db = AppDatabase.getInstance(applicationContext)
         for (i in game.artists){
             val temp = ArtistsGamesRef(game.id,i.id)
