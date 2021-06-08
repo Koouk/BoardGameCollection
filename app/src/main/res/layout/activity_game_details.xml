@@ -6,7 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.GameDetailsActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBarDetaila"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -35,53 +46,55 @@
                         android:gravity="center" />
 
                     <ImageView
-                        android:maxHeight="200dp"
                         android:id="@+id/imageView2"
                         android:layout_width="0dp"
-                        android:layout_weight="2"
                         android:layout_height="match_parent"
-                        />
+                        android:layout_weight="2"
+                        android:maxHeight="200dp" />
 
                     <LinearLayout
-                        android:maxHeight="200dp"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.7"
+                        android:maxHeight="200dp"
                         android:orientation="vertical">
+
                         <Space
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="0dp" />
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
+
                         <ImageButton
                             android:id="@+id/imageButton"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             app:srcCompat="@android:drawable/ic_menu_edit" />
+
                         <Space
                             android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:layout_height="0dp" />
+                            android:layout_height="0dp"
+                            android:layout_weight="0.3" />
 
                         <ImageButton
                             android:id="@+id/delButton"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             app:srcCompat="@android:drawable/ic_menu_delete" />
 
                         <Space
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="0dp" />
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5" />
                     </LinearLayout>
 
                     <Space
                         android:layout_width="0dp"
-                        android:layout_weight="0.3"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -152,28 +165,28 @@
                 </LinearLayout>
 
 
-                    <LinearLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/descriptionShow"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/descriptionShow"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="@string/description" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/description" />
 
 
-                        <EditText
+                    <EditText
 
-                            android:id="@+id/descriptionEnter"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:gravity="start|top"
-                            android:inputType="textMultiLine" />
+                        android:id="@+id/descriptionEnter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -190,14 +203,13 @@
                         android:text="@string/location" />
 
                     <Spinner
-                        android:textColor="#FF0000"
                         android:id="@+id/locationsEnter"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="textPersonName"
-                        />
+                        android:textColor="#FF0000" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -216,6 +228,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -232,6 +245,55 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp">
+
+                    </Space>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/addArButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/add" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/RMArButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="@string/edit2" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -253,7 +315,54 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp">
 
+                    </Space>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/addDeButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/add" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/RMDeButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="@string/edit2" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -384,13 +493,12 @@
                         android:text="@string/bgg_id" />
 
                     <TextView
-                        android:focusable="false"
                         android:id="@+id/bggIdEnter"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
-                       />
+                        android:focusable="false" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -417,9 +525,6 @@
                 </LinearLayout>
 
 
-
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -440,9 +545,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:ems="10"
-                      />
+                        android:ems="10" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/bggParent"
                     android:layout_width="match_parent"
@@ -464,6 +569,7 @@
                         android:layout_weight="2"
                         android:ems="10" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -481,8 +587,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="start|top"
                         android:ems="10"
+                        android:gravity="start|top"
                         android:inputType="textMultiLine" />
                 </LinearLayout>
 
@@ -508,6 +614,7 @@
                         android:ems="10"
                         android:inputType="textPersonName" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -542,49 +649,52 @@
 
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
                 android:layout_height="match_parent"
+                android:layout_weight="0.5"
                 tools:ignore="NestedWeights">
 
             </Space>
 
             <Button
                 android:id="@+id/CancelButton"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/back" />
+
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.3"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="0.3">
 
             </Space>
+
             <Button
                 android:id="@+id/FetchButton"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1.2"
                 android:text="@string/bgg_fetch" />
 
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.3"
-                android:layout_height="match_parent">
-            </Space>
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"></Space>
+
             <Button
                 android:id="@+id/SaveButton"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/save" />
+
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
 
             </Space>
         </LinearLayout>

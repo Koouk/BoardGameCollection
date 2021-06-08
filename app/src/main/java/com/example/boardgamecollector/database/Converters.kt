@@ -21,6 +21,8 @@ class Converters {
 
     @TypeConverter
     fun fromStringToDate(value : String?) : LocalDate? {
+        if (value == null)
+            return null
         return LocalDate.parse(value,formatter)
     }
 
@@ -35,6 +37,8 @@ class Converters {
 
     @TypeConverter
     fun fromStringToDateTime(value : String?) : LocalDateTime? {
+        if (value == null)
+            return null
         return LocalDateTime.parse(value,formatter2)
     }
 

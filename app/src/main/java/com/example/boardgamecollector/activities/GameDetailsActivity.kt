@@ -10,8 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.*
 import com.example.boardgamecollector.R
 
 import com.example.boardgamecollector.dataModels.BGGHeader
@@ -20,6 +19,7 @@ import com.example.boardgamecollector.database.*
 import com.example.boardgamecollector.databinding.ActivityGameDetailsBinding
 import com.example.boardgamecollector.utils.BGGapi
 import com.example.boardgamecollector.utils.Helpers
+import com.google.android.material.internal.ContextUtils.getActivity
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -32,6 +32,10 @@ class GameDetailsActivity : AppCompatActivity() {
     private var initJob:Job? = null
     private var fetchJob:Job? = null
     private var locs: ArrayList<Location>? = null
+    private var allArtists : ArrayList<Artists>? = null
+    private var allDesigners: ArrayList<Designers>? = null
+    private var currentArtists : ArrayList<Artists>? = null
+    private var currentDesigners: ArrayList<Designers>? = null
 
     private  var game : Game? = null
     private var extensions : ArrayList<gameHeader>? = ArrayList<gameHeader>()
@@ -58,9 +62,196 @@ class GameDetailsActivity : AppCompatActivity() {
         binding.FetchButton.setOnClickListener { fetchData() }
         binding.delButton.setOnClickListener{ delete()}
         binding.rankEnter.setOnClickListener { rankHistory() }
+        binding.addArButton.setOnClickListener { addArtist() }
+        binding.RMArButton.setOnClickListener { rmArtist() }
+        binding.addDeButton.setOnClickListener { addDesigner() }
+        binding.RMDeButton.setOnClickListener { rmDesigner() }
         initData(id)
 
 
+    }
+    private fun addArtist() {
+
+        val alert = AlertDialog.Builder(this)
+        alert.setTitle(getString(R.string.input))
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+
+        val name = EditText(this)
+        name.hint = getString(R.string.name)
+        val surname = EditText(this)
+        surname.hint = getString(R.string.surname)
+        layout.addView(name)
+        layout.addView(surname)
+        alert.setView(layout)
+
+        alert.setPositiveButton(getString(R.string.Add)) { _, _ ->
+            CoroutineScope(Dispatchers.Main).launch {
+                val ar = Artists(0, name.text.toString(), surname.text.toString())
+                withContext(Dispatchers.IO) {
+                    val db = AppDatabase.getInstance(applicationContext)
+                    val ids =  db.ArtistsDAO().insert(ar)
+                    ar.id = ids
+                    game?.artists?.add(ar)
+                }
+
+                artistDesignersFill()
+            }}
+        alert.setNegativeButton(getString(R.string.cancel) ){ dialog, whichButton -> dialog.cancel() }
+        alert.show()
+    }
+
+    private fun rmArtist() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.persons))
+
+        game?.artists?.sortBy {  it.surname }
+
+
+        val gameString = mutableListOf<String>()
+        currentArtists = ArrayList<Artists>()
+
+        game?.artists?.forEach {
+            gameString.add("${it.name} ${it.surname}")
+            currentArtists!!.add(it)
+        }
+        allArtists?.forEach{
+            if (game?.artists?.contains(it)  == false){
+            gameString.add("${it.name} ${it.surname}")
+            currentArtists!!.add(it)
+            }
+        }
+
+        val checkedItems = BooleanArray(gameString.size) {false}
+        for (i in game?.artists?.indices!!){
+            checkedItems[i] = true
+        }
+        builder.setMultiChoiceItems(gameString.toTypedArray(), checkedItems) { dialog, which, isChecked ->
+            // user checked or unchecked a box
+            checkedItems[which] = isChecked
+        }
+
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            val selected = ArrayList<Artists>()
+            for (i in checkedItems.indices)
+            {
+                if (checkedItems[i])
+                    selected.add(currentArtists!![i])
+
+            }
+            game?.artists = selected
+            artistDesignersFill()
+            dialog.cancel()
+
+        })
+        builder.setNegativeButton("Cancel"){ dialog, _ ->
+            dialog.cancel()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    private fun addDesigner() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.persons))
+
+        game?.designers?.sortBy {  it.surname }
+
+
+        val gameString = mutableListOf<String>()
+        currentDesigners= ArrayList<Designers>()
+
+        game?.designers?.forEach {
+            gameString.add("${it.name} ${it.surname}")
+            currentDesigners!!.add(it)
+        }
+        allDesigners?.forEach{
+            if (game?.designers?.contains(it)  == false){
+                gameString.add("${it.name} ${it.surname}")
+                currentDesigners!!.add(it)
+            }
+        }
+
+        val checkedItems = BooleanArray(gameString.size) {false}
+        for (i in game?.designers?.indices!!){
+            checkedItems[i] = true
+        }
+        builder.setMultiChoiceItems(gameString.toTypedArray(), checkedItems) { dialog, which, isChecked ->
+            // user checked or unchecked a box
+            checkedItems[which] = isChecked
+        }
+
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            val selected = ArrayList<Designers>()
+            for (i in checkedItems.indices)
+            {
+                if (checkedItems[i])
+                    selected.add(currentDesigners!![i])
+
+            }
+            game?.designers = selected
+            artistDesignersFill()
+            dialog.cancel()
+
+        })
+        builder.setNegativeButton("Cancel"){ dialog, _ ->
+            dialog.cancel()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    private fun rmDesigner() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.persons))
+
+        game?.designers?.sortBy {  it.surname }
+
+
+        val gameString = mutableListOf<String>()
+        currentDesigners = ArrayList<Designers>()
+
+        game?.designers?.forEach {
+            gameString.add("${it.name} ${it.surname}")
+            currentDesigners!!.add(it)
+        }
+        allDesigners?.forEach{
+            if (game?.designers?.contains(it)  == false){
+                gameString.add("${it.name} ${it.surname}")
+                currentDesigners!!.add(it)
+            }
+        }
+
+        val checkedItems = BooleanArray(gameString.size) {false}
+        for (i in game?.designers?.indices!!){
+            checkedItems[i] = true
+        }
+        builder.setMultiChoiceItems(gameString.toTypedArray(), checkedItems) { dialog, which, isChecked ->
+            // user checked or unchecked a box
+            checkedItems[which] = isChecked
+        }
+
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
+            val selected = ArrayList<Designers>()
+            for (i in checkedItems.indices)
+            {
+                if (checkedItems[i])
+                    selected.add(currentDesigners!![i])
+
+            }
+            game?.designers = selected
+            artistDesignersFill()
+            dialog.cancel()
+
+        })
+        builder.setNegativeButton("Cancel"){ dialog, _ ->
+            dialog.cancel()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun rankHistory() {
@@ -77,6 +268,7 @@ class GameDetailsActivity : AppCompatActivity() {
             withContext(Dispatchers.IO) {
                 val db = AppDatabase.getInstance(applicationContext)
                 game?.let { db.userDao().delete(it) }
+                finish()
             }
         }
     }
@@ -85,24 +277,29 @@ class GameDetailsActivity : AppCompatActivity() {
         if (game != null)
         {
             fetchJob = CoroutineScope(Dispatchers.Main).launch {
+
                 game!!.title  = binding.titleEnter.text.toString()
                if (game!!.bggId != 0.toLong())
                {
+                   binding.progressBarDetaila.visibility = View.VISIBLE
                    withContext(Dispatchers.IO) {
 
                        BGGapi.searchGameById(game!!.bggId, game!!)
-                       fillArtistDesigners()
+                       addArtistDesignersIfNotExists()
                    }
+                   binding.progressBarDetaila.visibility = View.INVISIBLE
                    fillForm()
                }
                 else if (!game!!.title.isNullOrBlank())
                {
                    var gamesH = ArrayList<BGGHeader>()
+                   binding.progressBarDetaila.visibility = View.VISIBLE
                    withContext(Dispatchers.IO) {
 
                        game!!.title?.let { BGGapi.searchGamesByTitle(it, gamesH) }
-                       fillArtistDesigners()
+                       addArtistDesignersIfNotExists()
                    }
+                   binding.progressBarDetaila.visibility = View.INVISIBLE
                    makeChoiceDialog(gamesH)
 
                }
@@ -162,6 +359,7 @@ class GameDetailsActivity : AppCompatActivity() {
     private fun initData(id: Long?) {
         initJob?.cancel()
         initJob = CoroutineScope(Dispatchers.Main).launch {
+            binding.progressBarDetaila.visibility = View.VISIBLE
             withContext(Dispatchers.IO) {
 
                 db = AppDatabase.getInstance(applicationContext)
@@ -170,7 +368,12 @@ class GameDetailsActivity : AppCompatActivity() {
                 locs = db!!.LocDAO().getAllLocalization() as ArrayList<Location>?
                 game?.artists = game?.let { db!!.ArtistsGameDAO().getArtistsOfGame(it.id) } as ArrayList<Artists>
                 game?.designers = db!!.DesignersGameDAO().getDesignersOfGame(game!!.id) as ArrayList<Designers>
+                allArtists = db!!.ArtistsDAO().getAll() as ArrayList<Artists>
+                allDesigners = db!!.DesignersDAO().getAll() as ArrayList<Designers>
+                allArtists!!.sortBy { it.surname }
+                allDesigners!!.sortBy { it.surname }
             }
+            binding.progressBarDetaila.visibility = View.INVISIBLE
             createLocAndTypeList()
             fillForm()
         }
@@ -191,6 +394,7 @@ class GameDetailsActivity : AppCompatActivity() {
 
         if (game != null)
         {
+            binding.progressBarDetaila.visibility = View.VISIBLE
             //TODO STRING RES
             binding.rankEnter.text = SpannableStringBuilder( "${getString(R.string.rank)} ${game!!.ranking.toString()}")
 
@@ -216,10 +420,7 @@ class GameDetailsActivity : AppCompatActivity() {
             binding.EANEnter.text = SpannableStringBuilder(game!!.ean)
             binding.bggIdEnter.text = SpannableStringBuilder(game!!.bggId.toString())
             binding.productionCodeEnter.text = SpannableStringBuilder(game!!.productionCode)
-
-
             binding.typeEnter.text = SpannableStringBuilder(game!!.gameType)
-
             binding.commentEnter.text = SpannableStringBuilder(game!!.comment)
 
             if (game!!.ThumbURL != null)
@@ -253,7 +454,7 @@ class GameDetailsActivity : AppCompatActivity() {
 
             var index = -1
             locs?.forEach{
-                if(it.id == game!!.localizationID){
+                if(it.id.toLong() == game!!.localizationID){
                     index = locs!!.indexOf(it)
                     }
             }
@@ -270,6 +471,7 @@ class GameDetailsActivity : AppCompatActivity() {
                 binding.imageView2.setImageBitmap(game!!.bitmap)
 
             }
+            binding.progressBarDetaila.visibility = View.INVISIBLE
         }
     }
 
@@ -303,6 +505,7 @@ class GameDetailsActivity : AppCompatActivity() {
     private fun saveGame() {
         val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
         CoroutineScope(Dispatchers.Main).launch {
+            binding.progressBarDetaila.visibility = View.VISIBLE
             if (game == null)
                 game = Game()
             game?.title = binding.titleEnter.text.toString()
@@ -322,30 +525,76 @@ class GameDetailsActivity : AppCompatActivity() {
                 Log.e("bggID",e.message.toString())
             }
 
-
-
             game?.productionCode = binding.productionCodeEnter.text.toString()
-
-
             game?.gameType = binding.typeEnter.text.toString()
-
-
             game?.comment = binding.commentEnter.text.toString()
             game?.ThumbURL = binding.thumbnailEnter.text.toString()
             game?.ImgURL = binding.imgEnter.text.toString()
 
             if (locs != null && binding.locationsEnter.selectedItemPosition > -1)
             {
-                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id
+                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id.toLong()
             }
 
 
             withContext(Dispatchers.IO) {
 
                 val db = AppDatabase.getInstance(applicationContext)
-                game?.let { db.userDao().updateGame(it) }
+                val ids = game?.let { db.userDao().updateGame(it) }
+                saveArtistDesigners()
             }
+            binding.progressBarDetaila.visibility = View.INVISIBLE
+            Toast.makeText(
+                applicationContext, R.string.ToastSave,
+                Toast.LENGTH_LONG).show()
         }
+    }
+
+    suspend fun saveArtistDesigners() {
+        val db = AppDatabase.getInstance(applicationContext)
+        if(game?.artists != null)
+            game?.id?.let { db.ArtistsGameDAO().nukeOptionID(it) }
+            for (i in game?.artists!!){
+                val temp = ArtistsGamesRef(game!!.id,i.id)
+                db.ArtistsGameDAO().insert(temp)
+            }
+        if(game?.designers != null)
+            game?.id?.let { db.DesignersGameDAO().nukeOptionID(it) }
+            for (i in game?.designers!!){
+                val temp = DesignersGamesRef(game!!.id,i.id)
+                db.DesignersGameDAO().insert(temp)
+            }
+    }
+
+    suspend fun addArtistDesignersIfNotExists() {
+        val db = AppDatabase.getInstance(applicationContext)
+        if(game?.artists != null )
+            for (i in game?.artists!!)
+            {
+                var count = 0
+                withContext(Dispatchers.IO) {
+
+                    count = db.ArtistsDAO().checkIfExists(i.bggID)
+                    if (count <= 0 || i.bggID < 1) {
+                        i.id = db.ArtistsDAO().insert(i)
+                    }else{
+                        i.id = db.ArtistsDAO().getID(i.bggID)
+                    }
+                }
+            }
+        if(game?.designers != null )
+            for (i in game?.designers!!)
+            {
+                var count = 0
+                withContext(Dispatchers.IO) {
+                    count = db.DesignersDAO().checkIfExists(i.bggID)
+                    if (count <= 0 || i.bggID < 1) {
+                        i.id = db.DesignersDAO().insert(i)
+                    }else{
+                        i.id = db.DesignersDAO().getID(i.bggID)
+                    }
+                }
+            }
     }
 
     private fun EditOn(){
@@ -384,31 +633,6 @@ class GameDetailsActivity : AppCompatActivity() {
 
     }
 
-    suspend fun fillArtistDesigners() {
-        val db = AppDatabase.getInstance(applicationContext)
-        if(game?.artists != null )
-            for (i in game?.artists!!)
-            {
-                var count = 0
-                withContext(Dispatchers.IO) {
 
-                    count = db.ArtistsDAO().checkIfExists(i.bggID)
-                    if (count <= 0 ) {
-                        i.id = db.ArtistsDAO().insert(i)
-                    }
-                }
-            }
-        if(game?.designers != null )
-            for (i in game?.designers!!)
-            {
-                var count = 0
-                withContext(Dispatchers.IO) {
-                    count = db.DesignersDAO().checkIfExists(i.bggID)
-                    if (count <= 0 ) {
-                        i.id = db.DesignersDAO().insert(i)
-                    }
-                }
-            }
-    }
 
 }

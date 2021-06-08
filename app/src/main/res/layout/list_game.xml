@@ -12,12 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="horizontal">
 
             <TextView
@@ -30,6 +32,7 @@
             <ImageView
                 android:id="@+id/gameImage"
                 android:layout_width="0dp"
+                android:minHeight="200dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:paddingVertical="100dp" />
@@ -57,6 +60,7 @@
                         android:layout_height="5dp" />
 
                     <TextView
+                        android:maxLines="18"
                         android:id="@+id/gameDescription"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

@@ -13,7 +13,12 @@ interface DesignersDAO {
     @Delete
     suspend fun delete(user: Designers)
 
+    @Query("SELECT * from Designers")
+    suspend fun getAll() : List<Designers>
+
     @Query("SELECT COUNT(*) from Designers WHERE bggID LIKE :id")
     suspend fun checkIfExists(id : Long) : Int
 
+    @Query("SELECT id from Designers WHERE bggID LIKE :id")
+    suspend fun getID(id : Long) : Long
 }

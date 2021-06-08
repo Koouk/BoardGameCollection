@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBarMain"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/gameList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addGame"
         android:layout_width="wrap_content"
@@ -17,6 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
+
 
     <TextView
         android:id="@+id/Hello"

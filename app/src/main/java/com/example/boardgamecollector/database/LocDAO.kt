@@ -1,9 +1,6 @@
 package com.example.boardgamecollector.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface LocDAO {
@@ -15,5 +12,11 @@ interface LocDAO {
 
     @Query("SELECT * from Locations")
     suspend fun getAllLocalization() : List<Location>
+
+    @Query("SELECT * from Locations WHERE id LIKE :id")
+    suspend fun getLocById(id : Long) : Location?
+
+    @Update
+    fun update(vararg users: Location)
 
 }

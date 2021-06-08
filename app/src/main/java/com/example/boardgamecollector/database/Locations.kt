@@ -8,11 +8,11 @@ import java.time.LocalDate
 @Entity(tableName = "Locations")
 data class Location(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @ColumnInfo(name = "Description")
-    val description : String?,
+    var description : String?,
     @ColumnInfo(name = "Name")
-    val name : String?
+    var name : String?
 
     )
 {

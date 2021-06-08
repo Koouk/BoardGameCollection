@@ -3,10 +3,13 @@ package com.example.boardgamecollector.utils
 import android.text.Html
 import android.util.Log
 import com.example.boardgamecollector.dataModels.BGGHeader
+import com.example.boardgamecollector.dataModels.RanksHeader
+import com.example.boardgamecollector.dataModels.gameHeader
 import com.example.boardgamecollector.database.Artists
 import com.example.boardgamecollector.database.Designers
 import com.example.boardgamecollector.database.Game
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.w3c.dom.Document
 import java.net.URL
@@ -157,5 +160,104 @@ class BGGapi {
 
         }
 
+        suspend fun getGameRank(game : RanksHeader)
+        {
+            val docBuilderFact = DocumentBuilderFactory.newInstance()
+            val doc = docBuilderFact.newDocumentBuilder()
+            var document : Document
+            try{
+                withContext(Dispatchers.IO) {
+                    document = doc.parse(
+                        URL(
+                            "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=${game.bggId}"
+                        ).openStream()
+                    )
+                }
+            }catch(e : Exception){
+                Log.e("Error: ", e.message.toString())
+                e.printStackTrace()
+                return
+            }
+
+            for(i in 0 until document.getElementsByTagName("rank").length) {
+                val ranks = document.getElementsByTagName("rank").item(i).attributes
+                if(ranks.getNamedItem("name")?.nodeValue == "boardgame" &&
+                    ranks.getNamedItem("value").nodeValue.toString() != "Not Ranked") {
+                    game.ranking = ranks.getNamedItem("value").nodeValue.toString().toInt()
+                    break
+                }
+            }
+        }
+
+        suspend fun getUserGameList(user: String, gameList: ArrayList <BGGHeader>)
+        {
+            val docBuilderFact = DocumentBuilderFactory.newInstance()
+            val doc = docBuilderFact.newDocumentBuilder()
+            var document : Document
+            var success = false
+            var attempts : Int = 3
+            var curr : Int = 0
+            while(true) {
+                curr += 1
+                try {
+                    document = withContext(Dispatchers.IO) {
+                        doc.parse(
+                            URL(
+                                "https://www.boardgamegeek.com/xmlapi2/collection?username=${user}&stats=1"
+                            ).openStream()
+                        )
+                    }
+                } catch (e: Exception) {
+                    Log.e("Error: ", e.message.toString())
+                    e.printStackTrace()
+                    return
+                }
+                if (document.getElementsByTagName("message")?.item(0)?.textContent?.contains("Please try again later for access.") != true)
+                {
+                    success = true
+                    break
+                }
+                if(curr == attempts)
+                    return
+                delay(10000)
+
+            }
+            if (!success)
+                return
+
+            val games = document.getElementsByTagName("item")
+            for (i in 0 until games.length) {
+                var id : Long = 0
+                var title : String = ""
+                var year : String = ""
+
+                try{
+
+                    id = games.item(i).attributes.getNamedItem("objectid").nodeValue.toString().toLong()
+                    val childrens = games.item(i).childNodes
+
+                    for(j in 0 until childrens.length) {
+
+                        if(childrens.item(j).nodeName == "originalname") {
+                            title = childrens.item(j).textContent.toString()
+                        } else if (childrens.item(j).nodeName == "yearpublished") {
+                            year = childrens.item(j).textContent.toString()
+                        } else if (childrens.item(j).nodeName == "name") {
+                            if(title.isBlank()) {
+                                title = childrens.item(j).textContent.toString()
+                            }
+                        }
+                    }
+                    gameList.add(BGGHeader(id,title,year))
+
+                }catch (e : Exception) {
+                    Log.e("BGG ERROR ", e.message.toString())
+                    e.printStackTrace()
+                }
+
+
+            }
+
+        }
     }
 }

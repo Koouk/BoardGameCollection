@@ -4,7 +4,9 @@ package com.example.boardgamecollector.activities
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -55,6 +57,15 @@ class LocationsActivity : AppCompatActivity() {
     private fun createLocListAdapter(){
         val mAdapter = LocAdapter(this, R.layout.list_loc, locList)
         binding.locList.adapter = mAdapter
+
+        binding.locList.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                val idT = locList[position].id
+                val intent = Intent(this, LocDetailsActivity::class.java)
+                intent.putExtra("id", idT.toString())
+                startActivity(intent)
+
+            }
     }
 
     private fun createLocList() {

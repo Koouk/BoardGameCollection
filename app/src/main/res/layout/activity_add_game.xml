@@ -6,7 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".activities.AddGameActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBarAdd"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout4" />
+
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -125,6 +138,55 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp">
+
+                    </Space>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/addArButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/add" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/RMArButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="@string/edit2" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -145,7 +207,54 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp">
 
+                    </Space>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/addDeButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/add" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+
+                        <Button
+                            android:id="@+id/RMDeButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="@string/edit2" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3">
+
+                        </Space>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -379,8 +488,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="start|top"
                         android:ems="10"
+                        android:gravity="start|top"
                         android:inputType="textMultiLine" />
                 </LinearLayout>
 
@@ -404,6 +513,7 @@
                         android:ems="10"
                         android:inputType="textPersonName" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -424,6 +534,7 @@
                         android:ems="10"
                         android:inputType="textPersonName" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -437,13 +548,13 @@
                         android:text="@string/location" />
 
                     <Spinner
-                        android:textColor="#FF0000"
                         android:id="@+id/locationsEnter"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:textColor="#FF0000" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
@@ -456,36 +567,39 @@
 
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
                 android:layout_height="match_parent"
+                android:layout_weight="0.5"
                 tools:ignore="NestedWeights">
 
             </Space>
 
             <Button
                 android:id="@+id/CancelButton"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/cancel" />
+
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
 
             </Space>
+
             <Button
                 android:id="@+id/SaveButton"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/save" />
+
             <Space
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
 
             </Space>
         </LinearLayout>

@@ -34,20 +34,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.addGame.setOnClickListener{ addGame() }
-
+        binding.progressBarMain.visibility = View.INVISIBLE
 
 
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-
-                db = AppDatabase.getInstance(applicationContext)
-
-            }
+            db = AppDatabase.getInstance(applicationContext)
             loadData()
         }
     }
-
-
 
 
     override fun onResume() {
@@ -75,8 +69,17 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
         when(id){
             R.id.Location -> locationsActivity()
+            R.id.BGG -> bggActivity()
+            R.id.Name -> sortByName()
+            R.id.Date -> sortByYear()
+            R.id.Rank -> sortByRank()
         }
         return true
+    }
+
+    private fun bggActivity() {
+        val i = Intent(this, BGGScreenActivity::class.java)
+        startActivity(i)
     }
 
     private fun locationsActivity()
@@ -87,6 +90,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
         createListJob = CoroutineScope(Dispatchers.Main).launch {
+            binding.progressBarMain.visibility = View.VISIBLE
             withContext(Dispatchers.IO) {
 
                 gameList = db?.userDao()?.getAllHeaders() as ArrayList<gameHeader>
@@ -95,6 +99,7 @@ class MainActivity : AppCompatActivity() {
                     i.image = i.URL?.let { Helpers.getImage(it) }
                 }
             }
+            binding.progressBarMain.visibility = View.INVISIBLE
             createGameListAdapter()
         }
     }
@@ -123,5 +128,18 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
     }
 
+    fun sortByYear() {
+        gameList.sortByDescending { it.year }
+        createGameListAdapter()
+    }
 
+    fun sortByRank() {
+        gameList.sortBy { if (it.ranking!! > 0) it.ranking else Int.MAX_VALUE }
+        createGameListAdapter()
+    }
+
+    fun sortByName() {
+        gameList.sortBy { if( it.title.isNullOrBlank()) "ZZZ" else it.title }
+        createGameListAdapter()
+    }
 }

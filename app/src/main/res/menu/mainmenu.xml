@@ -3,7 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/app_bar_switch"
+        android:title="@string/show_extensions"
+        app:actionLayout="@layout/switch_item"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/Location"
         android:title="@string/Locations" />
+    <item android:title="@string/bgg"
+        android:id="@+id/BGG"/>
+    <item android:title="@string/name33" android:id="@+id/Name"/>
+    <item android:title="@string/date33" android:id="@+id/Date"/>
+    <item android:title="@string/rank33" android:id="@+id/Rank"/>
 
 </menu>

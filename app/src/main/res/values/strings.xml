@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">BoardGameCollector</string>
     <string name="position">Position: </string>
+    <string name="input">Input name and surname </string>
+    <string name="name">Name:  </string>
+    <string name="gammm">Choose games to import:  </string>
+    <string name="sel">Reverse</string>
+    <string name="surname">Surname:  </string>
+    <string name="Add">Add</string>
+    <string name="Cancel">Cancel</string>
     <string name="nohist">There is no rank history to show </string>
     <string name="rank">Rank: </string>
     <string name="Until">Until: </string>
@@ -34,4 +41,25 @@
     <string name="owned_expansion">Owned expansion</string>
     <string name="artists">Artists</string>
     <string name="designers">Designers</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="bgg">BGG</string>
+    <string name="update_rankings">Update Rankings</string>
+    <string name="fetch_collection">Fetch Collection</string>
+    <string name="importCollection">Import Collection</string>
+    <string name="username">Username</string>
+    <string name="nameloc">Name</string>
+    <string name="commentloc">Comment</string>
+    <string name="location_name">Location Name</string>
+    <string name="location_comment">Location Comment</string>
+    <string name="games_in_location">Games in location:</string>
+    <string name="ToastSave">Changes saved.</string>
+    <string name="delete">Delete</string>
+    <string name="name33">Name</string>
+    <string name="date33">Date</string>
+    <string name="rank33">Rank</string>
+    <string name="show_extensions">Show extensions</string>
+    <string name="Error">Cannot delete not-empty location</string>
+    <string name="persons">"Choose person: "</string>
+    <string name="edit2">Edit</string>
 </resources>

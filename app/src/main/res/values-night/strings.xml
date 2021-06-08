@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Locations">Item</string>
+    <string name="Locations">Locations</string>
     <string name="addlocation">Add Location</string>
     <string name="title">Title</string>
     <string name="original_title">Original Title</string>
@@ -19,7 +19,6 @@
     <string name="thumbnail_url">Thumbnail URL</string>
     <string name="location">Location</string>
     <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
     <string name="image_link">Image Link</string>
     <string name="back">Back</string>
     <string name="expansions">Expansions</string>
@@ -28,4 +27,24 @@
     <string name="owned_expansion">Owned expansion</string>
     <string name="artists">Artists</string>
     <string name="designers">Designers</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="bgg">BGG</string>
+    <string name="update_rankings">Update Rankings</string>
+    <string name="fetch_collection">Fetch Collection</string>
+    <string name="importCollection">Import Collection</string>
+    <string name="username">Username</string>
+    <string name="nameloc">Name</string>
+    <string name="commentloc">Comment</string>
+    <string name="location_name">Location Name</string>
+    <string name="location_comment">Location Comment</string>
+    <string name="games_in_location">Games in location:</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="name33">Name</string>
+    <string name="rank33">Rank</string>
+    <string name="show_extensions">Show extensions</string>
+    <string name="Error">Cannot delete not-empty location</string>
+    <string name="persons">"Choose person: "</string>
+    <string name="edit2">Edit</string>
 </resources>

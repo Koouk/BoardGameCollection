@@ -15,6 +15,8 @@ interface ArtistsGameDAO {
     @Delete
     suspend fun delete(user: ArtistsGamesRef)
 
+    @Query("DELETE  FROM ArtistsGamesRef WHERE GameId = :id")
+    suspend fun nukeOptionID(id : Int)
 
     @Query("SELECT id,name,surname,bggID FROM ArtistsGamesRef JOIN Artists ON id = ArtistId WHERE GameId = :id")
     fun getArtistsOfGame(id : Int): List<Artists>
