@@ -12,7 +12,7 @@ class Converters {
     val formatter2 = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
 
     @TypeConverter
-    fun fromDateToString(value : LocalDate?) : String?{
+    fun fromDateToString(value: LocalDate?): String? {
         if (value != null) {
             return value.format(formatter)
         }
@@ -20,15 +20,15 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromStringToDate(value : String?) : LocalDate? {
+    fun fromStringToDate(value: String?): LocalDate? {
         if (value == null)
             return null
-        return LocalDate.parse(value,formatter)
+        return LocalDate.parse(value, formatter)
     }
 
 
     @TypeConverter
-    fun fromDateTimeToString(value : LocalDateTime?) : String?{
+    fun fromDateTimeToString(value: LocalDateTime?): String? {
         if (value != null) {
             return value.format(formatter2)
         }
@@ -36,10 +36,10 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromStringToDateTime(value : String?) : LocalDateTime? {
+    fun fromStringToDateTime(value: String?): LocalDateTime? {
         if (value == null)
             return null
-        return LocalDateTime.parse(value,formatter2)
+        return LocalDateTime.parse(value, formatter2)
     }
 
 }

@@ -8,18 +8,18 @@ interface ArtistsDAO {
     suspend fun insertAll(vararg users: Artists)
 
     @Insert
-    suspend fun insert(user: Artists) : Long
+    suspend fun insert(user: Artists): Long
 
     @Delete
     suspend fun delete(user: Artists)
 
     @Query("SELECT * from Artists")
-    suspend fun getAll() : List<Artists>
+    suspend fun getAll(): List<Artists>
 
     @Query("SELECT COUNT(*) from Artists WHERE bggID LIKE :id")
-    suspend fun checkIfExists(id : Long) : Int
+    suspend fun checkIfExists(id: Long): Int
 
     @Query("SELECT id from Artists WHERE bggID LIKE :id")
-    suspend fun getID(id : Long) : Long
+    suspend fun getID(id: Long): Long
 
 }

@@ -14,6 +14,6 @@ interface RankDAO {
     suspend fun delete(user: RankHistory)
 
     @Query("SELECT * from rankHistory WHERE Game_id LIKE :id")
-    suspend fun getRankById(id: Int) : List<RankHistory>
+    suspend fun getRankById(id: Int): List<RankHistory>
 
 }

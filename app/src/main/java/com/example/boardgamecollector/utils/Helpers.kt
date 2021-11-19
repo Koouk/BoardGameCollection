@@ -9,12 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.URL
 
-class Helpers :ViewModel(){
+class Helpers : ViewModel() {
 
 
     companion object {
 
-        val GAME_TYPE = arrayListOf("boardgame","boardgameexpansion","mixed")
+        val GAME_TYPE = arrayListOf("boardgame", "boardgameexpansion", "mixed")
 
         suspend fun getImage(link: String): Bitmap? {
 
@@ -22,15 +22,13 @@ class Helpers :ViewModel(){
             var newLink = link
 
             withContext(Dispatchers.IO) {
-                try{
-                    if (!link.startsWith("http://") && !link.startsWith("https://"))
-                    {
+                try {
+                    if (!link.startsWith("http://") && !link.startsWith("https://")) {
                         newLink = "http://$link"
                     }
                     val url = URL(newLink)
                     image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Log.e("Error Message", e.message.toString())
                     e.printStackTrace()
                 }

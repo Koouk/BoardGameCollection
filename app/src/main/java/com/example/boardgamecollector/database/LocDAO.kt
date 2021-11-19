@@ -11,10 +11,10 @@ interface LocDAO {
     suspend fun delete(user: Location)
 
     @Query("SELECT * from Locations")
-    suspend fun getAllLocalization() : List<Location>
+    suspend fun getAllLocalization(): List<Location>
 
     @Query("SELECT * from Locations WHERE id LIKE :id")
-    suspend fun getLocById(id : Long) : Location?
+    suspend fun getLocById(id: Long): Location?
 
     @Update
     fun update(vararg users: Location)

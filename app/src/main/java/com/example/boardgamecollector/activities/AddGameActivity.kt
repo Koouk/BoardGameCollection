@@ -1,7 +1,6 @@
 package com.example.boardgamecollector.activities
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -26,15 +25,15 @@ import java.time.LocalDate
 class AddGameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddGameBinding
-    private var title :String? = null
-    private var jobHeader : Job? = null
-    private var jobForm : Job? = null
+    private var title: String? = null
+    private var jobHeader: Job? = null
+    private var jobForm: Job? = null
     private var jobSpinner: Job? = null
-    private var game : Game = Game()
+    private var game: Game = Game()
     private var locs: ArrayList<Location>? = null
-    private var allArtists : ArrayList<Artists>? = null
+    private var allArtists: ArrayList<Artists>? = null
     private var allDesigners: ArrayList<Designers>? = null
-    private var currentArtists : ArrayList<Artists>? = null
+    private var currentArtists: ArrayList<Artists>? = null
     private var currentDesigners: ArrayList<Designers>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +41,8 @@ class AddGameActivity : AppCompatActivity() {
         binding = ActivityAddGameBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        binding.SaveButton.setOnClickListener{saveGame()}
-        binding.CancelButton.setOnClickListener{goBack()}
+        binding.SaveButton.setOnClickListener { saveGame() }
+        binding.CancelButton.setOnClickListener { goBack() }
         binding.addArButton.setOnClickListener { addArtist() }
         binding.RMArButton.setOnClickListener { rmArtist() }
         binding.addDeButton.setOnClickListener { addDesigner() }
@@ -75,14 +74,15 @@ class AddGameActivity : AppCompatActivity() {
                 val ar = Artists(0, name.text.toString(), surname.text.toString())
                 withContext(Dispatchers.IO) {
                     val db = AppDatabase.getInstance(applicationContext)
-                    val ids =  db.ArtistsDAO().insert(ar)
+                    val ids = db.ArtistsDAO().insert(ar)
                     ar.id = ids
                     game.artists.add(ar)
                 }
 
-            artistDesignersFill()
-        }}
-        alert.setNegativeButton(getString(R.string.cancel) ){ dialog, _ -> dialog.cancel() }
+                artistDesignersFill()
+            }
+        }
+        alert.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
         alert.show()
     }
 
@@ -90,7 +90,7 @@ class AddGameActivity : AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.persons))
 
-        game.artists.sortBy {  it.surname }
+        game.artists.sortBy { it.surname }
 
 
         val gameString = mutableListOf<String>()
@@ -100,15 +100,15 @@ class AddGameActivity : AppCompatActivity() {
             gameString.add("${it.name} ${it.surname}")
             currentArtists!!.add(it)
         }
-        allArtists?.forEach{
-            if (!game.artists.contains(it)){
+        allArtists?.forEach {
+            if (!game.artists.contains(it)) {
                 gameString.add("${it.name} ${it.surname}")
                 currentArtists!!.add(it)
             }
         }
 
-        val checkedItems = BooleanArray(gameString.size) {false}
-        for (i in game.artists.indices){
+        val checkedItems = BooleanArray(gameString.size) { false }
+        for (i in game.artists.indices) {
             checkedItems[i] = true
         }
         builder.setMultiChoiceItems(gameString.toTypedArray(), checkedItems) { _, which, isChecked ->
@@ -129,7 +129,7 @@ class AddGameActivity : AppCompatActivity() {
             dialog.cancel()
 
         }
-        builder.setNegativeButton("Cancel"){ dialog, _ ->
+        builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
         val dialog: AlertDialog = builder.create()
@@ -156,13 +156,14 @@ class AddGameActivity : AppCompatActivity() {
                 val ar = Designers(0, name.text.toString(), surname.text.toString())
                 withContext(Dispatchers.IO) {
                     val db = AppDatabase.getInstance(applicationContext)
-                    val ids =  db.DesignersDAO().insert(ar)
+                    val ids = db.DesignersDAO().insert(ar)
                     ar.id = ids
                     game.designers.add(ar)
                 }
                 artistDesignersFill()
-            }}
-        alert.setNegativeButton(getString(R.string.cancel) ){ dialog, _ -> dialog.cancel() }
+            }
+        }
+        alert.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
         alert.show()
     }
 
@@ -170,7 +171,7 @@ class AddGameActivity : AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.persons))
 
-        game.designers.sortBy {  it.surname }
+        game.designers.sortBy { it.surname }
 
 
         val gameString = mutableListOf<String>()
@@ -180,15 +181,15 @@ class AddGameActivity : AppCompatActivity() {
             gameString.add("${it.name} ${it.surname}")
             currentDesigners!!.add(it)
         }
-        allDesigners?.forEach{
-            if (!game.designers.contains(it)){
+        allDesigners?.forEach {
+            if (!game.designers.contains(it)) {
                 gameString.add("${it.name} ${it.surname}")
                 currentDesigners!!.add(it)
             }
         }
 
-        val checkedItems = BooleanArray(gameString.size) {false}
-        for (i in game.designers.indices){
+        val checkedItems = BooleanArray(gameString.size) { false }
+        for (i in game.designers.indices) {
             checkedItems[i] = true
         }
         builder.setMultiChoiceItems(gameString.toTypedArray(), checkedItems) { _, which, isChecked ->
@@ -209,7 +210,7 @@ class AddGameActivity : AppCompatActivity() {
             dialog.cancel()
 
         }
-        builder.setNegativeButton("Cancel"){ dialog, _ ->
+        builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
         val dialog: AlertDialog = builder.create()
@@ -245,7 +246,7 @@ class AddGameActivity : AppCompatActivity() {
 
             }
         }
-            
+
         jobSpinner?.cancel()
         jobSpinner = CoroutineScope(Dispatchers.Main).launch {
 
@@ -279,7 +280,7 @@ class AddGameActivity : AppCompatActivity() {
     private fun makeTitleDialog() {
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        val alertText =resources.getString(R.string.addGameAlertTitle)
+        val alertText = resources.getString(R.string.addGameAlertTitle)
         builder.setTitle(alertText)
 
         val input = EditText(this)
@@ -297,20 +298,21 @@ class AddGameActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun makeChoiceDialog(games : ArrayList<BGGHeader>) {
+    private fun makeChoiceDialog(games: ArrayList<BGGHeader>) {
         val alertDialog = AlertDialog.Builder(this)
 
         alertDialog.setIcon(R.drawable.ic_launcher_foreground)
 
         alertDialog.setTitle("Choose an Item")
 
-        val listItems : List <String> = games.map { i ->
+        val listItems: List<String> = games.map { i ->
             "${i.title} (${i.year})"
         }
-        var checkedItem  : Int = -1
+        var checkedItem: Int = -1
 
         alertDialog.setSingleChoiceItems(
-            listItems.toTypedArray(), checkedItem )
+            listItems.toTypedArray(), checkedItem
+        )
         { _, which ->
 
             checkedItem = which
@@ -370,7 +372,7 @@ class AddGameActivity : AppCompatActivity() {
 
             binding.typeEnter.setSelection(index)
 
-            if(game.parentBGG != null)
+            if (game.parentBGG != null)
                 binding.bggParentEnter.text = SpannableStringBuilder(game.parentBGG.toString())
 
             artistDesignersFill()
@@ -379,27 +381,25 @@ class AddGameActivity : AppCompatActivity() {
 
     private suspend fun addArtistDesignersIfNotExists() {
         val db = AppDatabase.getInstance(applicationContext)
-        for (i in game.artists)
-        {
+        for (i in game.artists) {
             var count = 0
             withContext(Dispatchers.IO) {
 
                 count = db.ArtistsDAO().checkIfExists(i.bggID)
                 if (count <= 0 || i.bggID < 1) {
                     i.id = db.ArtistsDAO().insert(i)
-                }else{
+                } else {
                     i.id = db.ArtistsDAO().getID(i.bggID)
                 }
             }
         }
-        for (i in game.designers)
-        {
+        for (i in game.designers) {
             var count = 0
             withContext(Dispatchers.IO) {
                 count = db.DesignersDAO().checkIfExists(i.bggID)
                 if (count <= 0 || i.bggID < 1) {
                     i.id = db.DesignersDAO().insert(i)
-                }else{
+                } else {
                     i.id = db.DesignersDAO().getID(i.bggID)
                 }
             }
@@ -415,21 +415,21 @@ class AddGameActivity : AppCompatActivity() {
             game.releaseYear = binding.releaseYearEnter.text.toString()
             game.description = binding.descriptionEnter.text.toString()
             val p1 = binding.OrderDatePicker
-            game.orderDate = LocalDate.of(p1.year, p1.month+ 1, p1.dayOfMonth)
+            game.orderDate = LocalDate.of(p1.year, p1.month + 1, p1.dayOfMonth)
             val p2 = binding.AddDatePicker
-            game.addDate = LocalDate.of(p2.year, p2.month+ 1, p2.dayOfMonth)
+            game.addDate = LocalDate.of(p2.year, p2.month + 1, p2.dayOfMonth)
             game.cost = binding.costEnter.text.toString()
             game.scd = binding.SCDEnter.text.toString()
             game.ean = binding.EANEnter.text.toString()
             try {
                 game.bggId = binding.bggIdEnter.text.toString().toLong()
-            }catch (e :Exception){
-                Log.e("bggID",e.message.toString())
+            } catch (e: Exception) {
+                Log.e("bggID", e.message.toString())
             }
             try {
                 game.ranking = binding.rankingEnter.text.toString().toInt()
-            }catch (e :Exception){
-                Log.e("rank",e.message.toString())
+            } catch (e: Exception) {
+                Log.e("rank", e.message.toString())
             }
 
             game.productionCode = binding.productionCodeEnter.text.toString()
@@ -448,9 +448,8 @@ class AddGameActivity : AppCompatActivity() {
                 game.parentBGG = pGG.toLong()
 
             if (binding.locationsEnter.selectedItemPosition == 0)
-                game?.localizationID = null
-            else if (locs != null && binding.locationsEnter.selectedItemPosition > 0)
-            {
+                game.localizationID = null
+            else if (locs != null && binding.locationsEnter.selectedItemPosition > 0) {
                 game.localizationID = locs!![binding.locationsEnter.selectedItemPosition - 1].id
             }
 
@@ -469,24 +468,24 @@ class AddGameActivity : AppCompatActivity() {
 
     private suspend fun saveArtistDesigners() {
         val db = AppDatabase.getInstance(applicationContext)
-        for (i in game.artists){
-            val temp = ArtistsGamesRef(game.id,i.id)
+        for (i in game.artists) {
+            val temp = ArtistsGamesRef(game.id, i.id)
             db.ArtistsGameDAO().insert(temp)
         }
-        for (i in game.designers){
-            val temp = DesignersGamesRef(game.id,i.id)
+        for (i in game.designers) {
+            val temp = DesignersGamesRef(game.id, i.id)
             db.DesignersGameDAO().insert(temp)
         }
     }
 
-    private fun getGamesByName(){
+    private fun getGamesByName() {
         jobHeader?.cancel()
-        val games : ArrayList<BGGHeader> = ArrayList()
+        val games: ArrayList<BGGHeader> = ArrayList()
         jobHeader = CoroutineScope(Dispatchers.Main).launch {
             binding.progressBarAdd.visibility = View.VISIBLE
             withContext(Dispatchers.IO) {
                 if (title != null)
-                    BGGapi.searchGamesByTitle(title!!,games)
+                    BGGapi.searchGamesByTitle(title!!, games)
             }
             binding.progressBarAdd.visibility = View.INVISIBLE
             makeChoiceDialog(games)
@@ -499,8 +498,8 @@ class AddGameActivity : AppCompatActivity() {
             des.add("${i.name} ${i.surname}")
         }
 
-        val adapterD= ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, des)
-        binding.designersEnter.adapter  = adapterD
+        val adapterD = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, des)
+        binding.designersEnter.adapter = adapterD
 
         val art = ArrayList<String>()
         for (i in game.artists) {
@@ -508,9 +507,9 @@ class AddGameActivity : AppCompatActivity() {
         }
 
         val adapterA = ArrayAdapter<String>(applicationContext, android.R.layout.simple_list_item_1, art)
-        binding.artistsEnter.adapter  = adapterA
+        binding.artistsEnter.adapter = adapterA
 
-        Helpers.strechList( binding.designersEnter)
-        Helpers.strechList( binding.artistsEnter)
+        Helpers.strechList(binding.designersEnter)
+        Helpers.strechList(binding.artistsEnter)
     }
 }

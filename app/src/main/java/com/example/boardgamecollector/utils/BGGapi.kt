@@ -20,16 +20,16 @@ class BGGapi {
         suspend fun searchGamesByTitle(title: String, gameList: ArrayList<BGGHeader>) {
             val docBuilderFact = DocumentBuilderFactory.newInstance()
             val doc = docBuilderFact.newDocumentBuilder()
-            var document : Document
-            try{
-                 withContext(Dispatchers.IO) {
+            var document: Document
+            try {
+                withContext(Dispatchers.IO) {
                     document = doc.parse(
                         URL(
                             "https://www.boardgamegeek.com/xmlapi2/search?query=${title}&type=boardgame"
                         ).openStream()
                     )
                 }
-            }catch(e : Exception){
+            } catch (e: Exception) {
                 Log.e("Error: ", e.message.toString())
                 e.printStackTrace()
                 return
@@ -39,23 +39,24 @@ class BGGapi {
                 try {
                     val BGGid = nodes.item(i).attributes.getNamedItem("id").nodeValue.toString().toLong()
                     val name = nodes.item(i).childNodes.item(1).attributes.getNamedItem("value").nodeValue.toString()
-                    var year = nodes.item(i).childNodes.item(3)?.attributes?.getNamedItem("value")?.nodeValue?.toString()
+                    var year =
+                        nodes.item(i).childNodes.item(3)?.attributes?.getNamedItem("value")?.nodeValue?.toString()
                     if (year == null)
                         year = ""
 
                     gameList.add(BGGHeader(BGGid, name, year))
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     Log.e("BGG ERROR ", e.message.toString())
                     e.printStackTrace()
                 }
             }
         }
 
-        suspend fun searchGameById(id : Long, game : Game){
+        suspend fun searchGameById(id: Long, game: Game) {
             val docBuilderFact = DocumentBuilderFactory.newInstance()
             val doc = docBuilderFact.newDocumentBuilder()
-            var document : Document
-            try{
+            var document: Document
+            try {
                 withContext(Dispatchers.IO) {
                     document = doc.parse(
                         URL(
@@ -63,21 +64,21 @@ class BGGapi {
                         ).openStream()
                     )
                 }
-            }catch(e : Exception){
+            } catch (e: Exception) {
                 Log.e("Error: ", e.message.toString())
                 e.printStackTrace()
                 return
             }
 
             var orgName = ""
-            var thumb :String? = null
+            var thumb: String? = null
             var img: String? = null
             var desc = ""
             var rank = 0
             var type = ""
-            var baseGameId : Long? = null
-            val art : ArrayList<Artists> = ArrayList<Artists>()
-            val des : ArrayList<Designers> = ArrayList<Designers>()
+            var baseGameId: Long? = null
+            val art: ArrayList<Artists> = ArrayList<Artists>()
+            val des: ArrayList<Designers> = ArrayList<Designers>()
             try {
                 orgName = document.getElementsByTagName("name").item(0).attributes.getNamedItem("value").nodeValue
                 thumb = document.getElementsByTagName("thumbnail")?.item(0)?.textContent
@@ -87,55 +88,53 @@ class BGGapi {
                 type = document.getElementsByTagName("item").item(0).attributes.getNamedItem("type").nodeValue
 
 
-                for(i in 0 until document.getElementsByTagName("link").length) {
+                for (i in 0 until document.getElementsByTagName("link").length) {
                     val a = document.getElementsByTagName("link").item(i).attributes
                     val v = a.getNamedItem("type")?.nodeValue
 
-                    if(v == "boardgameexpansion") {
+                    if (v == "boardgameexpansion") {
                         if (a.getNamedItem("inbound")?.nodeValue?.toString() == "true") {
                             val bid = a.getNamedItem("id")?.nodeValue?.toLong()
                             baseGameId = bid
 
                         }
                     }
-                    if (v == "boardgamedesigner")
-                    {
+                    if (v == "boardgamedesigner") {
                         val value = a.getNamedItem("value")?.nodeValue
                         val idIem = a.getNamedItem("id")?.nodeValue
 
-                        if(value != null) {
+                        if (value != null) {
                             val (n, s) = value.toString().split(' ')
                             var idd = -1L
                             if (!idIem.isNullOrBlank())
                                 idd = idIem.toString().toLong()
-                            des.add(Designers(0,n,s,idd))
+                            des.add(Designers(0, n, s, idd))
                         }
                     }
-                    if (v == "boardgameartist")
-                    {
+                    if (v == "boardgameartist") {
                         val value = a.getNamedItem("value")?.nodeValue
                         val idIem = a.getNamedItem("id")?.nodeValue
 
-                        if(value != null) {
+                        if (value != null) {
                             val (n, s) = value.toString().split(' ')
                             var idd = -1L
                             if (!idIem.isNullOrBlank())
                                 idd = idIem.toString().toLong()
-                            art.add(Artists(0,n,s,idd))
+                            art.add(Artists(0, n, s, idd))
                         }
                     }
                 }
 
-                for(i in 0 until document.getElementsByTagName("rank").length) {
+                for (i in 0 until document.getElementsByTagName("rank").length) {
                     val ranks = document.getElementsByTagName("rank").item(i).attributes
-                    if(ranks.getNamedItem("name")?.nodeValue == "boardgame" &&
-                        ranks.getNamedItem("value").nodeValue.toString() != "Not Ranked") {
-                            rank = ranks.getNamedItem("value").nodeValue.toString().toInt()
-                            break
+                    if (ranks.getNamedItem("name")?.nodeValue == "boardgame" &&
+                        ranks.getNamedItem("value").nodeValue.toString() != "Not Ranked"
+                    ) {
+                        rank = ranks.getNamedItem("value").nodeValue.toString().toInt()
+                        break
                     }
                 }
-            }
-            catch (e : Exception) {
+            } catch (e: Exception) {
                 Log.e("BGG ERROR ", e.message.toString())
                 e.printStackTrace()
             }
@@ -150,21 +149,23 @@ class BGGapi {
             game.artists = art
             game.designers = des
 
-            if(game.releaseYear.isNullOrBlank())
-                game.releaseYear = document.getElementsByTagName("yearpublished").item(0)?.attributes?.getNamedItem("value")?.nodeValue.toString()
+            if (game.releaseYear.isNullOrBlank())
+                game.releaseYear = document.getElementsByTagName("yearpublished")
+                    .item(0)?.attributes?.getNamedItem("value")?.nodeValue.toString()
 
-            if(game.bggId == 0L)
-                game.bggId = document.getElementsByTagName("item").item(0).attributes.getNamedItem("id").nodeValue.toString().toLong()
+            if (game.bggId == 0L)
+                game.bggId =
+                    document.getElementsByTagName("item").item(0).attributes.getNamedItem("id").nodeValue.toString()
+                        .toLong()
 
 
         }
 
-        suspend fun getGameRank(game : RanksHeader)
-        {
+        suspend fun getGameRank(game: RanksHeader) {
             val docBuilderFact = DocumentBuilderFactory.newInstance()
             val doc = docBuilderFact.newDocumentBuilder()
-            var document : Document
-            try{
+            var document: Document
+            try {
                 withContext(Dispatchers.IO) {
                     document = doc.parse(
                         URL(
@@ -172,31 +173,31 @@ class BGGapi {
                         ).openStream()
                     )
                 }
-            }catch(e : Exception){
+            } catch (e: Exception) {
                 Log.e("Error: ", e.message.toString())
                 e.printStackTrace()
                 return
             }
 
-            for(i in 0 until document.getElementsByTagName("rank").length) {
+            for (i in 0 until document.getElementsByTagName("rank").length) {
                 val ranks = document.getElementsByTagName("rank").item(i).attributes
-                if(ranks.getNamedItem("name")?.nodeValue == "boardgame" &&
-                    ranks.getNamedItem("value").nodeValue.toString() != "Not Ranked") {
+                if (ranks.getNamedItem("name")?.nodeValue == "boardgame" &&
+                    ranks.getNamedItem("value").nodeValue.toString() != "Not Ranked"
+                ) {
                     game.ranking = ranks.getNamedItem("value").nodeValue.toString().toInt()
                     break
                 }
             }
         }
 
-        suspend fun getUserGameList(user: String, gameList: ArrayList <BGGHeader>)
-        {
+        suspend fun getUserGameList(user: String, gameList: ArrayList<BGGHeader>) {
             val docBuilderFact = DocumentBuilderFactory.newInstance()
             val doc = docBuilderFact.newDocumentBuilder()
-            var document : Document
+            var document: Document
             var success = false
             val attempts = 3
             var curr = 0
-            while(true) {
+            while (true) {
                 curr += 1
                 try {
                     document = withContext(Dispatchers.IO) {
@@ -211,12 +212,13 @@ class BGGapi {
                     e.printStackTrace()
                     return
                 }
-                if (document.getElementsByTagName("message")?.item(0)?.textContent?.contains("Please try again later for access.") != true)
-                {
+                if (document.getElementsByTagName("message")
+                        ?.item(0)?.textContent?.contains("Please try again later for access.") != true
+                ) {
                     success = true
                     break
                 }
-                if(curr == attempts)
+                if (curr == attempts)
                     return
                 delay(10000)
 
@@ -226,30 +228,30 @@ class BGGapi {
 
             val games = document.getElementsByTagName("item")
             for (i in 0 until games.length) {
-                var id : Long = 0
+                var id: Long = 0
                 var title = ""
                 var year = ""
 
-                try{
+                try {
 
                     id = games.item(i).attributes.getNamedItem("objectid").nodeValue.toString().toLong()
                     val childrens = games.item(i).childNodes
 
-                    for(j in 0 until childrens.length) {
+                    for (j in 0 until childrens.length) {
 
-                        if(childrens.item(j).nodeName == "originalname") {
+                        if (childrens.item(j).nodeName == "originalname") {
                             title = childrens.item(j).textContent.toString()
                         } else if (childrens.item(j).nodeName == "yearpublished") {
                             year = childrens.item(j).textContent.toString()
                         } else if (childrens.item(j).nodeName == "name") {
-                            if(title.isBlank()) {
+                            if (title.isBlank()) {
                                 title = childrens.item(j).textContent.toString()
                             }
                         }
                     }
-                    gameList.add(BGGHeader(id,title,year))
+                    gameList.add(BGGHeader(id, title, year))
 
-                }catch (e : Exception) {
+                } catch (e: Exception) {
                     Log.e("BGG ERROR ", e.message.toString())
                     e.printStackTrace()
                 }

@@ -18,20 +18,20 @@ class LocDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocDetailsBinding
     private var id: Long? = null
-    private var location : Location? = null
-    private var createListJob : Job? =null
+    private var location: Location? = null
+    private var createListJob: Job? = null
     var gameList = ArrayList<LocHeader>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLocDetailsBinding.inflate(layoutInflater)
         val view = binding.root
-        setContentView(view )
+        setContentView(view)
 
         val extras = intent.extras ?: return
-        id = extras.getString("id")?.toLong()!!
+        id = extras.getString("id").toLong()!!
 
-        if(id != null)
+        if (id != null)
             fillDetails()
         else
             finish()
@@ -48,12 +48,14 @@ class LocDetailsActivity : AppCompatActivity() {
                 location?.description = binding.Comment.text.toString()
                 val db = AppDatabase.getInstance(applicationContext)
                 location?.let { db.LocDAO().update(it) }
-                withContext(Dispatchers.Main){
-                Toast.makeText(
-                    applicationContext, com.example.boardgamecollector.R.string.ToastSave,
-                    Toast.LENGTH_LONG).show()
-                }}
-        finish()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        applicationContext, com.example.boardgamecollector.R.string.ToastSave,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            finish()
         }
     }
 
@@ -66,13 +68,14 @@ class LocDetailsActivity : AppCompatActivity() {
                 if (count != null) {
                     if (count.isNotEmpty()) {
                         withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            applicationContext, com.example.boardgamecollector.R.string.Error,
-                            Toast.LENGTH_LONG
-                        ).show()}
-                    }else{
+                            Toast.makeText(
+                                applicationContext, com.example.boardgamecollector.R.string.Error,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
                         location?.let { db.LocDAO().delete(it) }
-                    finish()
+                        finish()
                     }
                 }
             }

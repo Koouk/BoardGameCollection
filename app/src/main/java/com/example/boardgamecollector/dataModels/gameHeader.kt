@@ -10,9 +10,8 @@ data class gameHeader(
     val description: String? = null,
     val ranking: Int?,
     val year: String?,
-    val URL : String? = null,
-)
-{
+    val URL: String? = null,
+) {
     @Ignore
     var image: Bitmap? = null
 }

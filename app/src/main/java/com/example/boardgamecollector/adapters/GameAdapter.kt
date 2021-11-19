@@ -17,7 +17,7 @@ open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHead
 
     private val mContext: Context = context
     private var moviesList: ArrayList<gameHeader> = list
-    private var gamesListFilter : ArrayList<gameHeader> = list
+    private var gamesListFilter: ArrayList<gameHeader> = list
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -33,8 +33,7 @@ open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHead
         val bitmapImage = currentGame.image
         if (bitmapImage == null) {
             imageField.setImageResource(R.drawable.imgerror)
-        }
-        else {
+        } else {
             imageField.setImageBitmap(bitmapImage)
         }
 
@@ -42,7 +41,7 @@ open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHead
         rankField.text = currentGame.ranking.toString()
 
         val titleField = listItem.findViewById<TextView>(R.id.gameTitleYear)
-        val TitleAndYear = currentGame.title + " (" +currentGame.year + ") "
+        val TitleAndYear = currentGame.title + " (" + currentGame.year + ") "
         titleField.text = TitleAndYear
 
         val descriptionField = listItem.findViewById<TextView>(R.id.gameDescription)

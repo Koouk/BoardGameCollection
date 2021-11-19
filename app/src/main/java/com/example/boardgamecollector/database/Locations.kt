@@ -9,8 +9,8 @@ data class Location(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     @ColumnInfo(name = "Description")
-    var description : String?,
+    var description: String?,
     @ColumnInfo(name = "Name")
-    var name : String?
+    var name: String?
 
-    )
+)

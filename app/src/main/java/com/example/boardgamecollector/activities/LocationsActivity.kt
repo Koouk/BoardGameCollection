@@ -21,8 +21,8 @@ import kotlinx.coroutines.*
 class LocationsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocationsBinding
-    private var createListJob : Job? = null
-    private lateinit var db : AppDatabase
+    private var createListJob: Job? = null
+    private lateinit var db: AppDatabase
     var locList: ArrayList<Location> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +30,10 @@ class LocationsActivity : AppCompatActivity() {
 
         binding = ActivityLocationsBinding.inflate(layoutInflater)
         val view = binding.root
-        setContentView(view )
+        setContentView(view)
 
 
-        binding.addLoc.setOnClickListener{ addLoc() }
+        binding.addLoc.setOnClickListener { addLoc() }
         db = AppDatabase.getInstance(applicationContext)
         createLocList()
 
@@ -53,7 +53,7 @@ class LocationsActivity : AppCompatActivity() {
         createListJob = null
     }
 
-    private fun createLocListAdapter(){
+    private fun createLocListAdapter() {
         val mAdapter = LocAdapter(this, R.layout.list_loc, locList)
         binding.locList.adapter = mAdapter
 
@@ -81,29 +81,29 @@ class LocationsActivity : AppCompatActivity() {
     private fun addLoc() {
 
 
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            val context: Context = this
-            val layout = LinearLayout(context)
-            layout.orientation = LinearLayout.VERTICAL
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        val context: Context = this
+        val layout = LinearLayout(context)
+        layout.orientation = LinearLayout.VERTICAL
 
-            val titleBox = EditText(context)
-            titleBox.hint = "Name"
-            layout.addView(titleBox)
+        val titleBox = EditText(context)
+        titleBox.hint = "Name"
+        layout.addView(titleBox)
 
-            val descriptionBox = EditText(context)
-            descriptionBox.hint = "Description"
-            layout.addView(descriptionBox)
+        val descriptionBox = EditText(context)
+        descriptionBox.hint = "Description"
+        layout.addView(descriptionBox)
 
-            builder.setView(layout)
+        builder.setView(layout)
 
 
 
-            builder.setPositiveButton("Save", DialogInterface.OnClickListener { dialog, which ->
-                saveLoc(titleBox.text.toString(),descriptionBox.text.toString())
-            })
-            builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+        builder.setPositiveButton("Save", DialogInterface.OnClickListener { dialog, which ->
+            saveLoc(titleBox.text.toString(), descriptionBox.text.toString())
+        })
+        builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
-            builder.show()
+        builder.show()
 
     }
 
@@ -111,7 +111,7 @@ class LocationsActivity : AppCompatActivity() {
 
         createListJob?.cancel()
         createListJob = CoroutineScope(Dispatchers.Main).launch {
-            val loc = Location(0,name = name,description = description)
+            val loc = Location(0, name = name, description = description)
             locList.add(loc)
             withContext(Dispatchers.IO) {
 

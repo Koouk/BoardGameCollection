@@ -21,9 +21,9 @@ import kotlinx.coroutines.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var createListJob : Job? = null
+    private var createListJob: Job? = null
     var gameList: ArrayList<gameHeader> = ArrayList()
-    private var db : AppDatabase? = null
+    private var db: AppDatabase? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.addGame.setOnClickListener{ addGame() }
+        binding.addGame.setOnClickListener { addGame() }
         binding.progressBarMain.visibility = View.INVISIBLE
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when(item.itemId){
+        when (item.itemId) {
             R.id.Location -> locationsActivity()
             R.id.BGG -> bggActivity()
             R.id.Name -> sortByName()
@@ -80,8 +80,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
     }
 
-    private fun locationsActivity()
-    {
+    private fun locationsActivity() {
         val i = Intent(this, LocationsActivity::class.java)
         startActivity(i)
     }
@@ -92,8 +91,7 @@ class MainActivity : AppCompatActivity() {
             withContext(Dispatchers.IO) {
 
                 gameList = db?.userDao()?.getAllHeaders() as ArrayList<gameHeader>
-                for (i in gameList)
-                {
+                for (i in gameList) {
                     i.image = i.URL?.let { Helpers.getImage(it) }
                 }
             }
@@ -102,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createGameListAdapter(){
+    private fun createGameListAdapter() {
         val mAdapter = GameAdapter(this, R.layout.list_game, gameList)
         binding.gameList.adapter = mAdapter
 
@@ -125,8 +123,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    private fun addGame(){
+    private fun addGame() {
         val i = Intent(this, AddGameActivity::class.java)
         startActivity(i)
     }
@@ -142,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sortByName() {
-        gameList.sortBy { if( it.title.isNullOrBlank()) "ZZZ" else it.title }
+        gameList.sortBy { if (it.title.isNullOrBlank()) "ZZZ" else it.title }
         createGameListAdapter()
     }
 }

@@ -9,6 +9,6 @@ data class Designers constructor(
     var id: Long = 0,
     var name: String = "",
     var surname: String = "",
-    var bggID : Long = -1
+    var bggID: Long = -1
 )
 
