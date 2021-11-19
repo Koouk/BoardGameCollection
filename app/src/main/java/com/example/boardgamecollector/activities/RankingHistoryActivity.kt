@@ -43,12 +43,12 @@ class RankingHistoryActivity : AppCompatActivity() {
                 val db = AppDatabase.getInstance(applicationContext)
                 ranks = db.RankDAO().getRankById(id) as ArrayList<RankHistory>
             }
-            ranks.sortBy { it.untilDate }
+            ranks.sortBy{ it.untilDate }
             val rankList = mutableListOf<String>()
 
             for (i in ranks)
             {
-                rankList.add( "${getString(R.string.ranking)}: ${i.rank}, ${getString(R.string.Until)}: ${i.untilDate}" )
+                rankList.add( "${getString(R.string.ranking)}: ${i.rank}, ${getString(R.string.Until)} ${i.untilDate}" )
             }
             if (ranks.size == 0)
             {

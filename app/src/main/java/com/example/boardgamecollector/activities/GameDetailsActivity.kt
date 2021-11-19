@@ -18,6 +18,7 @@ import com.example.boardgamecollector.utils.BGGapi
 import com.example.boardgamecollector.utils.Helpers
 import kotlinx.coroutines.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class GameDetailsActivity : AppCompatActivity() {
@@ -299,6 +300,12 @@ class GameDetailsActivity : AppCompatActivity() {
                    makeChoiceDialog(gamesH)
 
                }
+                else
+               {
+                   Toast.makeText(
+                       applicationContext, R.string.noData,
+                       Toast.LENGTH_LONG).show()
+               }
             }
         }
     }
@@ -378,6 +385,7 @@ class GameDetailsActivity : AppCompatActivity() {
     private fun createLocAndTypeList() {
 
         val list = arrayListOf<String>()
+        list.add(getString(R.string.emptyElement))
         locs?.forEach {
             list.add("${it.name} (${it.description})")
         }
@@ -410,7 +418,7 @@ class GameDetailsActivity : AppCompatActivity() {
             if(date != null) {
                 binding.AddDatePicker.updateDate(date.year, date.monthValue - 1, date.dayOfMonth)
             }
-
+            binding.rankNewEnter.text= SpannableStringBuilder(game!!.ranking.toString())
             binding.costEnter.text = SpannableStringBuilder(game!!.cost)
             binding.SCDEnter.text = SpannableStringBuilder(game!!.scd)
             binding.EANEnter.text = SpannableStringBuilder(game!!.ean)
@@ -418,6 +426,7 @@ class GameDetailsActivity : AppCompatActivity() {
             binding.productionCodeEnter.text = SpannableStringBuilder(game!!.productionCode)
             binding.typeEnter.text = SpannableStringBuilder(game!!.gameType)
             binding.commentEnter.text = SpannableStringBuilder(game!!.comment)
+            binding.locCOMEnter.text = SpannableStringBuilder(game!!.locComment)
 
             if (game!!.ThumbURL != null)
                 binding.thumbnailEnter.text = SpannableStringBuilder(game!!.ThumbURL)
@@ -454,7 +463,7 @@ class GameDetailsActivity : AppCompatActivity() {
                     index = locs!!.indexOf(it)
                     }
             }
-            binding.locationsEnter.setSelection(index)
+            binding.locationsEnter.setSelection(index + 1)
 
             artistDesignersFill()
 
@@ -493,7 +502,6 @@ class GameDetailsActivity : AppCompatActivity() {
     }
 
     private fun saveGame() {
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
         CoroutineScope(Dispatchers.Main).launch {
             binding.progressBarDetaila.visibility = View.VISIBLE
             if (game == null)
@@ -514,22 +522,33 @@ class GameDetailsActivity : AppCompatActivity() {
             }catch (e :Exception){
                 Log.e("bggID",e.message.toString())
             }
-
+            game?.locComment = binding.locCOMEnter.text.toString()
             game?.productionCode = binding.productionCodeEnter.text.toString()
             game?.gameType = binding.typeEnter.text.toString()
             game?.comment = binding.commentEnter.text.toString()
             game?.ThumbURL = binding.thumbnailEnter.text.toString()
             game?.ImgURL = binding.imgEnter.text.toString()
 
-            if (locs != null && binding.locationsEnter.selectedItemPosition > -1)
+            if (binding.locationsEnter.selectedItemPosition == 0)
+                game?.localizationID = null
+            else if (locs != null && binding.locationsEnter.selectedItemPosition > 0)
             {
-                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id
+                game?.localizationID = locs!![binding.locationsEnter.selectedItemPosition - 1].id
             }
+
+            val newRanking = binding.rankNewEnter.text.toString().toInt()
 
 
             withContext(Dispatchers.IO) {
 
                 val db = AppDatabase.getInstance(applicationContext)
+                if (newRanking != game!!.ranking)
+                {
+                    val dRank = RankHistory(0, game!!.id,game!!.ranking, LocalDateTime.now() )
+                    db.RankDAO().insertAll(dRank)
+                    game!!.ranking = newRanking
+                }
+
                 val ids = game?.let { db.userDao().updateGame(it) }
                 saveArtistDesigners()
             }
@@ -537,6 +556,7 @@ class GameDetailsActivity : AppCompatActivity() {
             Toast.makeText(
                 applicationContext, R.string.ToastSave,
                 Toast.LENGTH_LONG).show()
+            fillForm()
         }
     }
 
@@ -589,6 +609,7 @@ class GameDetailsActivity : AppCompatActivity() {
 
     private fun EditOn(){
         temp = 1
+        binding.rankNewEnter.isFocusableInTouchMode= true
         binding.imageButton.background = getDrawable(R.drawable.red_border)
         binding.titleEnter.isFocusableInTouchMode = true
         binding.orgTitleEnter.isFocusableInTouchMode = true
@@ -602,11 +623,13 @@ class GameDetailsActivity : AppCompatActivity() {
         binding.commentEnter.isFocusableInTouchMode = true
         binding.thumbnailEnter.isFocusableInTouchMode = true
         binding.imgEnter.isFocusableInTouchMode = true
+        binding.locCOMEnter.isFocusableInTouchMode = true
 
     }
 
     private fun EditOff(){
         temp = 0
+        binding.rankNewEnter.isFocusableInTouchMode= false
         binding.imageButton.background = null
         binding.titleEnter.isFocusableInTouchMode = false
         binding.orgTitleEnter.isFocusableInTouchMode = false
@@ -620,7 +643,7 @@ class GameDetailsActivity : AppCompatActivity() {
         binding.commentEnter.isFocusableInTouchMode = false
         binding.thumbnailEnter.isFocusableInTouchMode = false
         binding.imgEnter.isFocusableInTouchMode = false
-
+        binding.locCOMEnter.isFocusableInTouchMode = false
     }
 
 

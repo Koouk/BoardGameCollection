@@ -45,8 +45,9 @@ data class Game constructor(
     @ColumnInfo(name = "Big_Image_link")
     var ImgURL : String? = null,
     @ColumnInfo(name = "localizationID", index = true)
-    var localizationID: Long? = null
-
+    var localizationID: Long? = null,
+    @ColumnInfo(name = "LocComment", index = true)
+    var locComment: String = ""
     )
 {
     @Ignore var bitmap : Bitmap? = null

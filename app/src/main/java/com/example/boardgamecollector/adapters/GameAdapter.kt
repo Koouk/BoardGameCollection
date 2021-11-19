@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.boardgamecollector.R
@@ -24,7 +25,7 @@ open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHead
         if (listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_game, parent, false)
 
-        val currentGame = moviesList[position]
+        val currentGame = gamesListFilter[position]
 
         val imageField: ImageView = listItem?.findViewById(R.id.gameImage) as ImageView
 
@@ -50,5 +51,50 @@ open class GameAdapter(context: Context, resource: Int, list: ArrayList<gameHead
         return listItem
     }
 
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+                gamesListFilter = results.values as ArrayList<gameHeader> // has the filtered values
+                notifyDataSetChanged() // notifies the data with new filtered values
+            }
 
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                var constraint = constraint
+                val results =
+                    FilterResults() // Holds the results of a filtering operation in values
+                val FilteredArrList: ArrayList<gameHeader> = ArrayList<gameHeader>()
+
+                if (constraint == null || constraint.length == 0) {
+
+                    // set the Original result to return
+                    results.count = moviesList.size
+                    results.values = moviesList
+                } else {
+                    constraint = constraint.toString().toLowerCase()
+                    for (i in 0 until moviesList.size) {
+                        val data: String? = moviesList.get(i).title
+                        if (data != null) {
+                            if (data.toLowerCase().contains(constraint.toString())) {
+                                FilteredArrList.add(
+                                    moviesList[i]
+                                )
+                            }
+                        }
+                    }
+                    // set the Filtered result to return
+                    results.count = FilteredArrList.size
+                    results.values = FilteredArrList
+                }
+                return results
+            }
+        }
+    }
+
+    override fun getCount(): Int {
+        return gamesListFilter.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
 }

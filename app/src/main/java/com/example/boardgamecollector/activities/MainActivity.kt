@@ -2,12 +2,12 @@ package com.example.boardgamecollector.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boardgamecollector.R
 import com.example.boardgamecollector.adapters.GameAdapter
@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         binding.addGame.setOnClickListener{ addGame() }
         binding.progressBarMain.visibility = View.INVISIBLE
 
-
         CoroutineScope(Dispatchers.Main).launch {
             db = AppDatabase.getInstance(applicationContext)
             loadData()
@@ -60,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
+
         return true
     }
 
@@ -112,7 +112,17 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("id", idT.toString())
             startActivity(intent)
         }
-        }
+
+        binding.search.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // Call back the Adapter with current character to Filter
+                (binding.gameList.adapter as GameAdapter).filter.filter(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable) {}
+        })
+    }
 
 
 

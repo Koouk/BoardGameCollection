@@ -1,8 +1,10 @@
 package com.example.boardgamecollector.activities
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,7 @@ class LocDetailsActivity : AppCompatActivity() {
     private var id: Long? = null
     private var location : Location? = null
     private var createListJob : Job? =null
+    var gameList = ArrayList<LocHeader>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class LocDetailsActivity : AppCompatActivity() {
         if(id != null)
             fillDetails()
         else
-            return
+            finish()
 
 
         binding.Save.setOnClickListener { save() }
@@ -84,7 +87,7 @@ class LocDetailsActivity : AppCompatActivity() {
     private fun fillDetails() {
         createListJob?.cancel()
         createListJob = CoroutineScope(Dispatchers.Main).launch {
-            var gameList = ArrayList<LocHeader>()
+
             withContext(Dispatchers.IO) {
                 val db = AppDatabase.getInstance(applicationContext)
                 location = id?.let { db.LocDAO().getLocById(it) }
@@ -100,6 +103,15 @@ class LocDetailsActivity : AppCompatActivity() {
             }
             val adapter = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, list)
             binding.List.adapter = adapter
+
+            binding.List.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+                    val idT = gameList[position].id
+                    val intent = Intent(applicationContext, GameDetailsActivity::class.java)
+                    intent.putExtra("id", idT.toString())
+                    startActivity(intent)
+
+                }
 
         }
     }

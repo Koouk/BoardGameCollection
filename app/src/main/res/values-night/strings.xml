@@ -37,15 +37,19 @@
     <string name="nameloc">Name</string>
     <string name="commentloc">Comment</string>
     <string name="location_name">Location Name</string>
-    <string name="location_comment">Location Comment</string>
     <string name="games_in_location">Games in location:</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
-    <string name="name33">Name</string>
-    <string name="rank33">Rank</string>
+    <string name="name33">Sort by Name</string>
+    <string name="rank33">Sort by Rank</string>
     <string name="show_extensions">Show extensions</string>
     <string name="Error">Cannot delete not-empty location</string>
     <string name="persons">"Choose person: "</string>
     <string name="edit2">Edit</string>
     <string name="game_list">Game list:</string>
+    <string name="search">Search</string>
+    <string name="emptyElement">None</string>
+    <string name="Comment">Comment</string>
+    <string name="noData">No title/bggID</string>
+    <string name="newRank">New Ranking:</string>
 </resources>

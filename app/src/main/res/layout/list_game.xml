@@ -52,6 +52,8 @@
 
                     <TextView
                         android:id="@+id/gameTitleYear"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 

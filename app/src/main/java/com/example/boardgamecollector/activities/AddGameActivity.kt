@@ -117,10 +117,9 @@ class AddGameActivity : AppCompatActivity() {
         }
 
 // add OK and Cancel buttons
-        builder.setPositiveButton("OK", { dialog, _ ->
+        builder.setPositiveButton("OK") { dialog, _ ->
             val selected = ArrayList<Artists>()
-            for (i in checkedItems.indices)
-            {
+            for (i in checkedItems.indices) {
                 if (checkedItems[i])
                     selected.add(currentArtists!![i])
 
@@ -129,7 +128,7 @@ class AddGameActivity : AppCompatActivity() {
             artistDesignersFill()
             dialog.cancel()
 
-        })
+        }
         builder.setNegativeButton("Cancel"){ dialog, _ ->
             dialog.cancel()
         }
@@ -198,10 +197,9 @@ class AddGameActivity : AppCompatActivity() {
         }
 
 // add OK and Cancel buttons
-        builder.setPositiveButton("OK", { dialog, _ ->
+        builder.setPositiveButton("OK") { dialog, _ ->
             val selected = ArrayList<Designers>()
-            for (i in checkedItems.indices)
-            {
+            for (i in checkedItems.indices) {
                 if (checkedItems[i])
                     selected.add(currentDesigners!![i])
 
@@ -210,7 +208,7 @@ class AddGameActivity : AppCompatActivity() {
             artistDesignersFill()
             dialog.cancel()
 
-        })
+        }
         builder.setNegativeButton("Cancel"){ dialog, _ ->
             dialog.cancel()
         }
@@ -244,7 +242,7 @@ class AddGameActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
         }
             
@@ -261,6 +259,7 @@ class AddGameActivity : AppCompatActivity() {
                 allDesigners!!.sortBy { it.surname }
             }
             val list = arrayListOf<String>()
+            list.add(getString(R.string.emptyElement))
             locs?.forEach {
                 list.add("${it.name} (${it.description})")
             }
@@ -288,12 +287,12 @@ class AddGameActivity : AppCompatActivity() {
         input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
-        builder.setPositiveButton("OK", { dialog, _ ->
+        builder.setPositiveButton("OK") { dialog, _ ->
             title = input.text.toString()
             dialog.cancel()
             getGamesByName()
-        })
-        builder.setNegativeButton("Cancel", { dialog, _ -> dialog.cancel() })
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
 
         builder.show()
     }
@@ -317,11 +316,12 @@ class AddGameActivity : AppCompatActivity() {
             checkedItem = which
         }
 
-        alertDialog.setPositiveButton("OK", { dialog, _ ->
-            fillForm(games[checkedItem])
+        alertDialog.setPositiveButton("OK") { dialog, _ ->
+            if (checkedItem > -1)
+                fillForm(games[checkedItem])
             dialog.dismiss()
 
-        })
+        }
         alertDialog.setNegativeButton(
             "Skip"
         ) { dialog, _ ->
@@ -437,7 +437,7 @@ class AddGameActivity : AppCompatActivity() {
             if (binding.typeEnter.selectedItemPosition != -1)
                 game.gameType = Helpers.GAME_TYPE[binding.typeEnter.selectedItemPosition]
 
-
+            game.locComment = binding.locCOMEnter.text.toString()
             game.comment = binding.commentEnter.text.toString()
             game.ThumbURL = binding.thumbnailEnter.text.toString()
             game.ImgURL = binding.imgEnter.text.toString()
@@ -447,9 +447,11 @@ class AddGameActivity : AppCompatActivity() {
             else
                 game.parentBGG = pGG.toLong()
 
-            if (locs != null && binding.locationsEnter.selectedItemPosition > -1)
+            if (binding.locationsEnter.selectedItemPosition == 0)
+                game?.localizationID = null
+            else if (locs != null && binding.locationsEnter.selectedItemPosition > 0)
             {
-                game.localizationID = locs!![binding.locationsEnter.selectedItemPosition].id
+                game.localizationID = locs!![binding.locationsEnter.selectedItemPosition - 1].id
             }
 
 
